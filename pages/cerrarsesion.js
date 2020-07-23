@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { CERRRAR_SESION } from '../graphql/usuarios';
-import Swal from 'sweetalert2';
 
 export default function CerrarSesion() {
   const client = useApolloClient();

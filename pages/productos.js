@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { getStandAloneApollo } from '../apollo';
 import Layout from '../component/Layout';
 import Producto from '../component/Producto';
 import { useQuery } from '@apollo/client';
@@ -49,13 +47,4 @@ export default function Productos({ productosApi }) {
       </Layout>
     </>
   );
-}
-
-export async function getStaticProps(ctx) {
-  const client = getStandAloneApollo();
-  await client.query({ query: OBTENER_PRODUCTOS });
-
-  return {
-    props: { productosApi: client.cache.extract() },
-  };
 }

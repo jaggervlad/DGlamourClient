@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Layout from '../component/Layout';
 import Pedido from '../component/pedidos/Pedido';

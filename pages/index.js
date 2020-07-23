@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Layout from '../component/Layout';
-import { useQuery, useApolloClient } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { OBTENER_CLIENTES } from '../graphql/clientes';
 import Cliente from '../component/Cliente';
 
