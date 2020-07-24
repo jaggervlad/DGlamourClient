@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import withApollo from 'next-with-apollo';
 
 const httpLink = createHttpLink({
-  uri: 'https://blooming-citadel-99802.herokuapp.com/',
+  uri: 'https://blooming-citadel-99802.herokuapp.com',
   fetch,
   credentials: 'include',
 });
