@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
-import Layout from '../component/Layout';
+import Layout from '../component/customs/Layout';
 import Swal from 'sweetalert2';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { initialValues, validationSchema } from '../schemas/clientes';
 import { useMutation } from '@apollo/client';
 import { NUEVO_CLIENTE, OBTENER_CLIENTES } from '../graphql/clientes';
+import { TitleNew } from '../component/customs/TitleNew';
 
 export default function NuevoCliente() {
   const router = useRouter();
@@ -22,24 +23,7 @@ export default function NuevoCliente() {
       });
     },
   });
-  const initialValues = {
-    cedula: '',
-    nombre: '',
-    mail: '',
-    telefono: '',
-    direccion: '',
-    ciudad: '',
-  };
-  const validationSchema = Yup.object().shape({
-    cedula: Yup.string().min(1).max(10).required('Este campo es obligatorio'),
-    nombre: Yup.string().required('Este campo es obligatorio'),
-    mail: Yup.string()
-      .email('Email no válido')
-      .required('Este campo es obligatorio'),
-    telefono: Yup.number().required('Este campo es obligatorio'),
-    direccion: Yup.string().required('Este campo es obligatorio'),
-    ciudad: Yup.string().required('Este campo es obligatorio'),
-  });
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -60,7 +44,7 @@ export default function NuevoCliente() {
 
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-800 font-light">Nuevo Cliente</h1>
+      <TitleNew title={`nuevo cliente`} />
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">

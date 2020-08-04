@@ -1,4 +1,4 @@
-import NuevaCuenta from '../component/NuevaCuenta';
+import NuevaCuenta from '../component/usuarios/NuevaCuenta';
 const Registro = () => {
   return <NuevaCuenta />;
 };

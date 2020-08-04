@@ -1,26 +1,34 @@
 import React from 'react';
-import Link from 'next/link';
-import Layout from '../component/Layout';
+import Layout from '../component/customs/Layout';
 import Pedido from '../component/pedidos/Pedido';
 import { useQuery } from '@apollo/client';
 import { OBTENER_PEDIDOS } from '../graphql/pedidos';
+import { NewLink } from '../component/customs/NewLink';
+import { Title } from '../component/customs/Title';
+import { Pagination } from '../component/customs/Pagination';
+import { usePagination } from '../hooks/usePagination';
 
 export default function Pedidos() {
-  const { data, loading, error } = useQuery(OBTENER_PEDIDOS);
-  const obtenerPedidos = data?.obtenerPedidos;
+  let obtenerPedidos, totalPedidos;
+  const { current, limit, offset, pageAfter, pageBefore } = usePagination();
+  const { data, loading, error } = useQuery(OBTENER_PEDIDOS, {
+    variables: { limit, offset },
+  });
 
   if (loading) return 'Cargando...';
   if (error) return `Error || ${error.message}`;
+  if (data) {
+    obtenerPedidos = data?.obtenerPedidos;
+    totalPedidos = data?.totalPedidos;
+  }
 
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-800 font-light">Pedidos</h1>
+      <Title title={`pedidos`} />
 
-      <Link href="/nuevopedido">
-        <a className="bg-blue-800 py-2 px-5 mt-3 inline-block text-white rounded text-sm hover:bg-gray-800 mb-3 uppercase font-bold">
-          Nuevo Pedido
-        </a>
-      </Link>
+      <NewLink model={`nuevo pedido`} ruta={`nuevopedido`} />
+      <NewLink model={`ver pedidos pagados`} ruta={`pedidospagados`} />
+      <NewLink model={`ver pedidos pendientes`} ruta={`pedidospendientes`} />
 
       {obtenerPedidos.length === 0 ? (
         <p className="mt-5 text-center text-2xl">No hay pedidos aún</p>
@@ -29,6 +37,14 @@ export default function Pedidos() {
           <Pedido key={pedido.id} pedido={pedido} />
         ))
       )}
+
+      <Pagination
+        total={totalPedidos}
+        current={current}
+        limit={limit}
+        pageAfter={pageAfter}
+        pageBefore={pageBefore}
+      />
     </Layout>
   );
 }

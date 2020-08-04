@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { CERRRAR_SESION } from '../graphql/usuarios';
+import { Ring } from 'react-awesome-spinners';
 
 export default function CerrarSesion() {
   const client = useApolloClient();
@@ -9,16 +10,13 @@ export default function CerrarSesion() {
   const [logout] = useMutation(CERRRAR_SESION);
 
   useEffect(() => {
-    logout().then(() => {
-      client.resetStore().then(() => {
-        router.push('/login');
-      });
-    });
+    const handleLogout = async () => {
+      await logout();
+      await client.resetStore();
+      router.push('/login');
+    };
+    handleLogout();
   }, [logout, router, client]);
 
-  return (
-    <div className="bg-gray-800 min-h-screen flex flex-col justify-center">
-      <div>Cerrando Sesion</div>
-    </div>
-  );
+  return <Ring />;
 }

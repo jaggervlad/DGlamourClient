@@ -1,10 +1,11 @@
-import Layout from '../component/Layout';
+import Layout from '../component/customs/Layout';
 import { useFormik } from 'formik';
 import { initialValues, validationSchema } from '../schemas/categorias';
 import { useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import { OBTENER_CATEGORIAS, NUEVA_CATEGORIA } from '../graphql/categorias';
+import { TitleNew } from '../component/customs/TitleNew';
 
 export default function NuevoProducto() {
   const router = useRouter();
@@ -46,9 +47,7 @@ export default function NuevoProducto() {
 
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-800 font-light text-center mt-8">
-        Crear Nueva Categoria
-      </h1>
+      <TitleNew title={`nueva categoria`} />
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">

@@ -1,4 +1,4 @@
-import Layout from '../component/Layout';
+import Layout from '../component/customs/Layout';
 import { useFormik } from 'formik';
 import { initialValues, validationSchema } from '../schemas/productos';
 import { useMutation, useQuery } from '@apollo/client';
@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import { NUEVO_PRODUCTO, OBTENER_PRODUCTOS } from '../graphql/productos';
 import { OBTENER_CATEGORIAS } from '../graphql/categorias';
+import { TitleNew } from '../component/customs/TitleNew';
 
 export default function NuevoProducto() {
   const router = useRouter();
@@ -31,7 +32,6 @@ export default function NuevoProducto() {
     validationSchema,
     onSubmit: async (values, helpers) => {
       const {
-        codigo,
         nombre,
         existencia,
         precio,
@@ -42,7 +42,6 @@ export default function NuevoProducto() {
       } = values;
       try {
         const input = {
-          codigo,
           nombre,
           existencia,
           precio,
@@ -68,9 +67,7 @@ export default function NuevoProducto() {
 
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-800 font-light text-center mt-8">
-        Crear Nuevo Producto
-      </h1>
+      <TitleNew title={`nuevo producto`} />
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">
@@ -78,11 +75,6 @@ export default function NuevoProducto() {
             className="bg-white shadow-md px-8 pt-6 pb-8 mb-4 "
             onSubmit={formik.handleSubmit}
           >
-            <div className="block mb-4">
-              <p className=" text-gray-700 text-sm font-bold mb-2">Codigo:</p>
-              <span className="text-gray-800 text-xl">CODIGO CORRELATIVO</span>
-            </div>
-
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"

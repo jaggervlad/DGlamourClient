@@ -1,12 +1,12 @@
-import Layout from '../../component/Layout';
+import Layout from '../../component/customs/Layout';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@apollo/client';
 import { validationSchema } from '../../schemas/productos';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 import { OBTENER_PRODUCTO, ACTUALIZAR_PRODUCTO } from '../../graphql/productos';
 import { useCategories } from '../../hooks/useCategories';
+import { TitleNew } from '../../component/customs/TitleNew';
 
 export default function EditarProducto() {
   const router = useRouter();
@@ -16,14 +16,18 @@ export default function EditarProducto() {
   });
   const obtenerProducto = data?.obtenerProducto;
   const [actualizarProducto] = useMutation(ACTUALIZAR_PRODUCTO);
-  const [categorias] = useCategories();
+  const {
+    categorias,
+    loading: categoriasLoading,
+    error: categoriasError,
+  } = useCategories();
 
-  if (loading) return 'Cargando...';
-  if (error) return `Error || ${error.message}`;
+  if (loading || categoriasLoading) return 'Cargando...';
+  if (error || categoriasError) return `Error || ${error.message}`;
 
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-800 font-light">Editar Producto</h1>
+      <TitleNew title={`editar producto`} />
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">

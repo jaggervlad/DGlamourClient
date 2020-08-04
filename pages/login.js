@@ -1,4 +1,4 @@
-import Autenticar from '../component/Autenticar';
+import Autenticar from '../component/usuarios/Autenticar';
 
 const Login = () => {
   return <Autenticar />;

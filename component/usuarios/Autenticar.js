@@ -1,11 +1,12 @@
 import React from 'react';
-import Layout from './Layout';
+import Layout from '../customs/Layout';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { loginValues, validationSchemaLogin } from '../../schemas/usuarios';
 import { useMutation, useApolloClient } from '@apollo/client';
-import { AUTENTICAR_USUARIO } from '../graphql/usuarios';
+import { AUTENTICAR_USUARIO } from '../../graphql/usuarios';
 import { useRouter } from 'next/router';
-import { useMessage } from '../hooks/useMessage';
+import { useMessage } from '../../hooks/useMessage';
+import { TitleCenter } from '../customs/TitleCenter';
 
 export default function Autenticar() {
   const router = useRouter();
@@ -13,23 +14,9 @@ export default function Autenticar() {
   const client = useApolloClient();
   const [autenticarUsuario] = useMutation(AUTENTICAR_USUARIO);
 
-  const initialValues = {
-    username: '',
-    password: '',
-  };
-  const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(3, 'Minimo 3 caracteres')
-      .max(20, 'Maximo 20 caracteres')
-      .required('El nombre de usuario es obligatorio'),
-    password: Yup.string()
-      .min(3, 'Minimo 3 caracteres')
-      .max(20, 'Maximo 20 caracteres')
-      .required('La contraseña es obligatoria'),
-  });
   const formik = useFormik({
-    initialValues,
-    validationSchema,
+    initialValues: loginValues,
+    validationSchema: validationSchemaLogin,
     onSubmit: async (data, helpers) => {
       const { username, password } = data;
       const input = { username, password };
@@ -56,7 +43,7 @@ export default function Autenticar() {
 
   return (
     <Layout>
-      <h1 className="text-center text-2xl text-white font-light">Login</h1>
+      <TitleCenter title={`login`} />
 
       {mensaje && mostrarMensaje()}
       <div className="flex justify-center mt-5">
@@ -118,7 +105,7 @@ export default function Autenticar() {
             <input
               disabled={formik.isSubmitting}
               type="submit"
-              className="bg-gray-800 w-full mt-5 p-2 text-white uppercas hover:cursor-pointer hover:bg-gray-900"
+              className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:cursor-pointer hover:bg-gray-900"
               value="Iniciar Sesión"
             />
           </form>

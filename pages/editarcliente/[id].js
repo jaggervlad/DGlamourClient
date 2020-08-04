@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
-import Layout from '../../component/Layout';
+import Layout from '../../component/customs/Layout';
 import { useQuery, useMutation } from '@apollo/client';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 import { OBTENER_CLIENTE, ACTUALIZAR_CLIENTE } from '../../graphql/clientes';
+import { validationSchema } from '../../schemas/clientes';
+import { TitleNew } from '../../component/customs/TitleNew';
 
 export default function EditarCliente() {
   const router = useRouter();
@@ -14,17 +15,6 @@ export default function EditarCliente() {
   });
   const [actualizarCliente] = useMutation(ACTUALIZAR_CLIENTE);
   const obtenerCliente = data?.obtenerCliente;
-
-  const validationSchema = Yup.object().shape({
-    cedula: Yup.string().min(1).max(10).required('Este campo es obligatorio'),
-    nombre: Yup.string().required('Este campo es obligatorio'),
-    direccion: Yup.string().required('Este campo es obligatorio'),
-    ciudad: Yup.string().required('Este campo es obligatorio'),
-    mail: Yup.string()
-      .email('Email no válido')
-      .required('Este campo es obligatorio'),
-    telefono: Yup.number().required('Este campo es obligatorio'),
-  });
 
   const actualizarInfoCliente = async (values, helpers) => {
     const { cedula, nombre, direccion, ciudad, mail, telefono } = values;
@@ -49,9 +39,7 @@ export default function EditarCliente() {
 
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-800 font-light text-center">
-        Editar Cliente
-      </h1>
+      <TitleNew title={`editar cliente`} />
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">

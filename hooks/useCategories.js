@@ -8,5 +8,5 @@ export function useCategories() {
   if (loading) return 'Cargando...';
   if (error) return `Error || ${error.message}`;
 
-  return [categorias];
+  return { categorias, loading, error };
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import Layout from './Layout';
+import Layout from '../customs/Layout';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { initialValues, validationSchema } from '../../schemas/usuarios';
 import { useMutation } from '@apollo/client';
-import { useMessage } from '../hooks/useMessage';
-import { NUEVA_CUENTA } from '../graphql/usuarios';
+import { useMessage } from '../../hooks/useMessage';
+import { NUEVA_CUENTA } from '../../graphql/usuarios';
 
 const NuevaCuenta = () => {
   const router = useRouter();
@@ -15,18 +15,8 @@ const NuevaCuenta = () => {
   const roles = [{ label: 'USUARIO' }, { label: 'ADMINISTRADOR' }];
 
   const formik = useFormik({
-    initialValues: {
-      nombre: '',
-      username: '',
-      password: '',
-      rol: '',
-    },
-    validationSchema: Yup.object().shape({
-      nombre: Yup.string().required('Este campo es obligatorio'),
-      username: Yup.string().required('Este campo es obligatorio'),
-      password: Yup.string().required('Este campo es obligatorio'),
-      rol: Yup.string().required('Este campo es obligatorio'),
-    }),
+    initialValues,
+    validationSchema,
     onSubmit: async (values, herlpers) => {
       const { nombre, username, password, rol } = values;
       const input = {
@@ -162,9 +152,12 @@ const NuevaCuenta = () => {
                   onBlur={formik.handleBlur}
                 >
                   {roles.map((role, index) => (
-                    <option key={index} value={role.label} lable={role.label}>
-                      {role.label}
-                    </option>
+                    <option
+                      key={index}
+                      value={role.label}
+                      label={role.label}
+                      defaultValue={role.label}
+                    />
                   ))}
                 </select>
               </div>
@@ -182,9 +175,6 @@ const NuevaCuenta = () => {
                 value="Crear Cuenta"
               />
             </form>
-
-            <pre>{JSON.stringify(formik.values, null, 2)}</pre>
-            <pre>{JSON.stringify(formik.errors, null, 2)}</pre>
           </div>
         </div>
       </Layout>

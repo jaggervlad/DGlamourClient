@@ -1,105 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useMutation } from '@apollo/client';
-import {
-  ACTUALIZAR_PEDIDO,
-  ELIMINAR_PEDIDO,
-  OBTENER_PEDIDOS_SINGLE,
-} from '../../graphql/pedidos';
-import Swal from 'sweetalert2';
+import React from 'react';
+import Link from 'next/link';
 import { useMessage } from '../../hooks/useMessage';
+import { useChangeStatus } from '../../hooks/useChangeStatus';
+import { StatusChange } from './StatusChange';
+import { EliminarPedido } from './EliminarPedido';
 
 export default function Pedido({ pedido }) {
   const [mensaje, guardarMensaje, mostrarMensaje] = useMessage();
-  const { id, total, cliente, estado } = pedido;
+  const { id, total, cliente, estado, direccion, pago } = pedido;
   const { nombre, mail, telefono } = cliente;
-  const [actualizarPedido] = useMutation(ACTUALIZAR_PEDIDO);
-  const [eliminarPedido] = useMutation(ELIMINAR_PEDIDO, {
-    update(cache) {
-      const { obtenerPedidos } = cache.readQuery({
-        query: OBTENER_PEDIDOS_SINGLE,
-      });
-
-      cache.writeQuery({
-        query: OBTENER_PEDIDOS_SINGLE,
-        data: {
-          obtenerPedidos: obtenerPedidos.filter((pedido) => pedido.id !== id),
-        },
-      });
-    },
-  });
-
-  const [estadoPedido, setEstadoPedido] = useState(estado);
-  const [clase, setClase] = useState('');
-  useEffect(() => {
-    if (estadoPedido) {
-      setEstadoPedido(estadoPedido);
-    }
-    clasePedido();
-  }, [estadoPedido]);
-
+  const { clase, setEstado, status } = useChangeStatus(estado);
   const pedidoMap = pedido.pedido.map(({ __typename, ...order }) => order);
-
-  const clasePedido = () => {
-    if (estadoPedido === 'PENDIENTE') {
-      setClase('border-yellow-500');
-    } else if (estadoPedido === 'PAGADO') {
-      setClase('border-green-500');
-    } else {
-      setClase('border-blue-800');
-    }
-  };
-
-  const cambiarEstadoPedido = async (nuevoEstado) => {
-    try {
-      const { data } = await actualizarPedido({
-        variables: {
-          id,
-          input: {
-            estado: nuevoEstado,
-            cliente: cliente.id,
-            pedido: pedidoMap,
-          },
-        },
-      });
-      setEstadoPedido(data.actualizarPedido.estado);
-    } catch (error) {
-      guardarMensaje(error.message.replace('Graphql error:', ''));
-
-      setTimeout(() => {
-        guardarMensaje(null);
-      }, 3000);
-    }
-  };
-  const confirmarEliminarPedido = () => {
-    Swal.fire({
-      title: '¿Deseas eliminar a este pedido?',
-      text: 'Esta acción no se puede deshacer',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Eliminar',
-      cancelButtonText: 'No, Cancelar',
-    }).then(async (result) => {
-      if (result.value) {
-        try {
-          const data = await eliminarPedido({
-            variables: {
-              id,
-            },
-          });
-
-          Swal.fire('Eliminado', data.eliminarPedido, 'success');
-        } catch (error) {
-          guardarMensaje(error.message.replace('Graphql error:', ''));
-
-          setTimeout(() => {
-            guardarMensaje(null);
-          }, 3000);
-        }
-      }
-    });
-  };
 
   return (
     <div
@@ -108,23 +19,6 @@ export default function Pedido({ pedido }) {
       {mensaje && mostrarMensaje()}
       <div>
         <p className="font-bold text-gray-800">Cliente: {nombre}</p>
-
-        {mail && (
-          <p className="flex items-center my-2">
-            <svg
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              className="w-4 h-4 mr-2"
-            >
-              <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-            </svg>
-            {mail}
-          </p>
-        )}
 
         {telefono && (
           <p className="flex items-center my-2">
@@ -143,21 +37,36 @@ export default function Pedido({ pedido }) {
           </p>
         )}
 
-        <h2 className="text-gray-800 font-bold mt-10">Estado Pedido:</h2>
+        {direccion && (
+          <p className="flex items-center my-2">
+            <svg
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-4 h-4 mr-2"
+            >
+              <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            {direccion}
+          </p>
+        )}
 
-        <select
-          className="mt-2 appearance-none bg-blue-600 border border-blue-600 text-white p-2 text-center rounded leading-tight focus:outline-none focus:bg-blue-600 focus:border-blue-500 uppercase text-xs font-bold "
-          value={estadoPedido}
-          onChange={(e) => cambiarEstadoPedido(e.target.value)}
-        >
-          <option value="PENDIENTE">PENDIENTE</option>
-          <option value="PAGADO">PAGADO</option>
-          <option value="DESPACHADO">DESPACHADO</option>
-        </select>
+        <StatusChange
+          id={id}
+          status={status}
+          setEstado={setEstado}
+          guardarMensaje={guardarMensaje}
+          cliente={cliente}
+          pedidoMap={pedidoMap}
+        />
       </div>
 
       <div>
-        <h2 className="text-gray-800 font-bold mt-2">Resumen del Pedido</h2>
+        <h2 className="text-gray-800 font-bold mt-2">Pedido No. {id}</h2>
         {pedido.pedido.map((articulo) => (
           <div key={articulo.id} className="mt-4">
             <p className="text-sm text-gray-600">
@@ -174,23 +83,45 @@ export default function Pedido({ pedido }) {
           <span className="font-light"> $ {total}</span>
         </p>
 
-        <button
-          className="uppercase text-xs font-bold  flex items-center mt-4 bg-red-800 px-5 py-2 inline-block text-white rounded leading-tight"
-          onClick={() => confirmarEliminarPedido()}
-        >
-          Eliminar Pedido
-          <svg
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            className="w-4 h-4 ml-2"
-          >
-            <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </button>
+        <div className="flex flex-row mb-6">
+          <EliminarPedido id={id} />
+
+          <div className=" px-3 md:mb-0">
+            <Link href="/editarpedido/[id]" as={`/editarpedido/${id}`}>
+              <button className=" uppercase text-xs font-bold mt-4 bg-green-600  px-5 py-2 inline-block text-white rounded leading-tight">
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  className="w-4 h-4 ml-2"
+                >
+                  <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+              </button>
+            </Link>
+          </div>
+
+          <div className=" px-3  md:mb-0">
+            <Link href="/verpedido/[id]" as={`/verpedido/${id}`}>
+              <button className=" uppercase text-xs font-bold mt-4 bg-orange-600  px-5 py-2 inline-block text-white rounded leading-tight">
+                <svg
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  className="w-4 h-4 ml-2"
+                >
+                  <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+              </button>
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

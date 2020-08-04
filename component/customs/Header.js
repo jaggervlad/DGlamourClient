@@ -1,20 +1,21 @@
-import { useContext } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { UsuarioContext } from '../context/usuarios/UsuarioContex';
 import Link from 'next/link';
+import useAuth from '../../hooks/useAuth';
 
 export default function Header() {
   const router = useRouter();
-  const {
-    value: { usuario },
-  } = useContext(UsuarioContext);
-  if (!usuario) router.push('/login');
-  const { nombre, username } = usuario;
+  const { isLogged, usuario } = useAuth();
+
+  useEffect(() => {
+    if (!isLogged) return router.push('/login');
+  }, [isLogged, router]);
+  const { nombre, username } = usuario.usuario;
 
   return (
     <div className="sm:flex sm:justify-between mb-6">
-      <p className="mr-2 mb-5 lg:mb-0 uppercase">
-        Hola: {nombre} - @{username}
+      <p className="mr-2 mb-5 lg:mb-0 capitalize">
+        Hola: {nombre} @{username}
       </p>
 
       <Link href="/cerrarsesion">

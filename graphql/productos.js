@@ -3,7 +3,6 @@ import { gql } from '@apollo/client';
 export const OBTENER_PRODUCTO = gql`
   query obtenerProducto($id: ID!) {
     obtenerProducto(id: $id) {
-      codigo
       nombre
       existencia
       precio
@@ -22,7 +21,6 @@ export const OBTENER_PRODUCTOS = gql`
   query obtenerProductos {
     obtenerProductos {
       id
-      codigo
       nombre
       existencia
       precio

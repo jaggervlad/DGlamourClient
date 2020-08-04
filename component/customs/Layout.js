@@ -1,9 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Sidebar from '../component/Sidebar';
+import Sidebar from './Sidebar';
 import Header from './Header';
-import UsuarioState from '../context/usuarios/UsuarioContex';
+import UsuarioState from '../../context/usuarios/UsuarioContext';
 
 export default function Layout({ children }) {
   const router = useRouter();

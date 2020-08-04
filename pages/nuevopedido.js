@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import PedidoContext from '../context/pedidos/PedidoContex';
 // Components
@@ -6,31 +6,40 @@ import Swal from 'sweetalert2';
 import AsignarCliente from '../component/pedidos/AsignarCliente';
 import AsignarProductos from '../component/pedidos/AsignarProductos';
 import ResumenPedido from '../component/pedidos/ResumenPedido';
-import Layout from '../component/Layout';
+import Layout from '../component/customs/Layout';
 import Total from '../component/pedidos/Total';
+import { TitleNew } from '../component/customs/TitleNew';
 // Graphql
 import { useMutation } from '@apollo/client';
 import { useMessage } from '../hooks/useMessage';
-import { NUEVO_PEDIDO, OBTENER_PEDIDOS } from '../graphql/pedidos';
+import {
+  NUEVO_PEDIDO,
+  OBTENER_PEDIDOS_SINGLE,
+  OBTENER_PEDIDOS,
+} from '../graphql/pedidos';
+import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
+// function update(cache, { data: nuevoPedido }) {
+//   const { obtenerPedidos } = cache.readQuery({
+//     query: OBTENER_PEDIDOS_SINGLE,
+//   });
+
+//   cache.writeQuery({
+//     query: OBTENER_PEDIDOS_SINGLE,
+//     data: {
+//       obtenerPedidos: [...obtenerPedidos, nuevoPedido],
+//     },
+//   });
+// }
 export default function NuevoPedido() {
+  const { register, errors, handleSubmit } = useForm();
   const router = useRouter();
   const [mensaje, guardarMensaje, mostrarMensaje] = useMessage();
   const pedidoContext = useContext(PedidoContext);
   const { cliente, productos, total } = pedidoContext;
   const [nuevoPedido] = useMutation(NUEVO_PEDIDO, {
-    update(cache, { data: nuevoPedido }) {
-      const { obtenerPedidos } = cache.readQuery({
-        query: OBTENER_PEDIDOS,
-      });
-
-      cache.writeQuery({
-        query: OBTENER_PEDIDOS,
-        data: {
-          obtenerPedidos: [...obtenerPedidos, nuevoPedido],
-        },
-      });
-    },
+    refetchQueries: [{ query: OBTENER_PEDIDOS }],
   });
   const { id } = cliente;
   const pedido = productos.map(
@@ -46,13 +55,25 @@ export default function NuevoPedido() {
     }) => productos
   );
 
-  console.log(pedido);
+  const validarPedido = () => {
+    return !productos?.every((producto) => producto.cantidad > 0) ||
+      total === 0 ||
+      cliente.length === 0
+      ? ' opacity-50 cursor-not-allowed '
+      : '';
+  };
 
-  const newOrder = async () => {
+  const onSubmit = async (data, e) => {
     try {
-      const input = { pedido, cliente: id, total };
+      const { direccion } = data;
+      const input = {
+        pedido,
+        cliente: id,
+        total,
+        direccion,
+      };
       await nuevoPedido({ variables: { input } });
-
+      e.target.reset();
       router.push('/pedidos');
       Swal.fire('Correcto', 'El pedido se registró correctamente', 'success');
     } catch (error) {
@@ -63,37 +84,41 @@ export default function NuevoPedido() {
       }, 3000);
     }
   };
-
-  const validarPedido = () => {
-    return !productos?.every((producto) => producto.cantidad > 0) ||
-      total === 0 ||
-      cliente.length === 0
-      ? ' opacity-50 cursor-not-allowed '
-      : '';
-  };
   return (
     <Layout>
-      <h1 className="text-center text-2xl text-gray-800 font-light">
-        Crear Nuevo Pedido
-      </h1>
+      <TitleNew title={`nuevo pedido`} />
 
       {mensaje && mostrarMensaje()}
 
       <div className="flex justify-center mt-5">
-        <div className="w-full max-w-lg">
+        <form className="w-full max-w-lg" onSubmit={handleSubmit(onSubmit)}>
           <AsignarCliente />
           <AsignarProductos />
           <ResumenPedido />
           <Total />
 
+          <label
+            className="block mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold mb-2"
+            htmlFor="direccion"
+          >
+            Direccion de Envio
+          </label>
+          <input
+            className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+            name="direccion"
+            placeholder="Dirección de envio"
+            ref={register({ required: 'Este campo es obligatorio' })}
+          />
+
+          <ErrorMessage errors={errors} name="direccion" />
+
           <button
-            type="button"
+            type="submit"
             className={` bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900 ${validarPedido()} `}
-            onClick={() => newOrder()}
           >
             Registrar Pedido
           </button>
-        </div>
+        </form>
       </div>
     </Layout>
   );

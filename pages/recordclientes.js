@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Layout from '../component/Layout';
+import Layout from '../component/customs/Layout';
 import { useQuery } from '@apollo/client';
 import {
   BarChart,

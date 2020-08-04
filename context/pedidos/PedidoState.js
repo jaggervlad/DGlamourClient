@@ -56,6 +56,10 @@ const PedidoState = ({ children }) => {
     });
   };
 
+  const onChange = () => {
+    console.log('Desde onChange');
+  };
+
   return (
     <PedidoContext.Provider
       value={{
@@ -66,6 +70,7 @@ const PedidoState = ({ children }) => {
         agregarProducto,
         cantidadProductos,
         actualizarTotal,
+        onChange,
       }}
     >
       {children}

@@ -17,8 +17,8 @@ export default function AsignarCliente() {
     setCliente(client);
   };
 
-  if (loading) return null;
-  if (error) return null;
+  if (loading) return 'Cargandoo';
+  if (error) return `Error || ${error.message}`;
   const obtenerClientes = data?.obtenerClientes;
 
   return (

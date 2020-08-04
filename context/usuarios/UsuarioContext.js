@@ -1,8 +1,8 @@
-import { createContext, useMemo, useEffect } from 'react';
-import Link from 'next/link';
+import { createContext, useMemo } from 'react';
 import { OBTENER_USUARIO } from '../../graphql/usuarios';
 import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { Ring } from 'react-awesome-spinners';
+import NotLogged from '../../component/customs/NotLogged';
 
 export const UsuarioContext = createContext({});
 
@@ -11,13 +11,8 @@ export default function UsuarioContextProvider({ children }) {
   const usuario = data?.obtenerUsuario;
   const value = useMemo(() => ({ usuario }), [usuario]);
 
-  if (loading) return 'Cargando...';
-  if (error)
-    return (
-      <Link href="/login">
-        <a> Inicia Sesion</a>
-      </Link>
-    );
+  if (loading) return <Ring />;
+  if (error) return <NotLogged />;
 
   return (
     <UsuarioContext.Provider value={{ value }}>
