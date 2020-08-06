@@ -11,6 +11,7 @@ import { TitleCenter } from '../customs/TitleCenter';
 export default function Autenticar() {
   const router = useRouter();
   const [mensaje, guardarMensaje, mostrarMensaje] = useMessage();
+
   const client = useApolloClient();
   const [autenticarUsuario] = useMutation(AUTENTICAR_USUARIO);
 
@@ -23,9 +24,13 @@ export default function Autenticar() {
 
       try {
         await client.resetStore();
-        await autenticarUsuario({ variables: { input } });
+        const { data } = await autenticarUsuario({
+          variables: { input },
+        });
+        const { token } = data.autenticarUsuario;
         guardarMensaje('Autenticando......');
 
+        localStorage.setItem('token', token);
         setTimeout(() => {
           guardarMensaje(null);
           helpers.setSubmitting(false);

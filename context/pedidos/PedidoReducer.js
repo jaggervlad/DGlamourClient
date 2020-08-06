@@ -5,7 +5,7 @@ import {
   ACTUALIZAR_TOTAL,
 } from '../../types';
 
-export default (state, action) => {
+export default function Reducer(state, action) {
   switch (action.type) {
     case SELECCIONAR_CLIENTE:
       return {
@@ -42,4 +42,4 @@ export default (state, action) => {
     default:
       return state;
   }
-};
+}

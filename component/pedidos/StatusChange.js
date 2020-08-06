@@ -1,15 +1,15 @@
+import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ACTUALIZAR_PEDIDO } from '../../graphql/pedidos';
+import Swal from 'sweetalert2';
 
-export function StatusChange({
-  status,
-  setEstado,
-  guardarMensaje,
-  cliente,
-  pedidoMap,
-  id,
-}) {
+export function StatusChange({ status, setEstado, cliente, pedidoMap, id }) {
   const [actualizarPedido] = useMutation(ACTUALIZAR_PEDIDO);
+  const [clase, setClase] = useState('');
+
+  useEffect(() => {
+    clasePedido();
+  }, [status]);
   const cambiarEstadoPedido = async (nuevoEstado) => {
     try {
       const { data } = await actualizarPedido({
@@ -24,19 +24,24 @@ export function StatusChange({
       });
       setEstado(data.actualizarPedido.estado);
     } catch (error) {
-      guardarMensaje(error.message.replace('Graphql error:', ''));
+      const errorMessage = error.message.replace('Graphql error: ', '');
+      Swal.fire('Error', errorMessage, 'error');
+    }
+  };
 
-      setTimeout(() => {
-        guardarMensaje(null);
-      }, 3000);
+  const clasePedido = () => {
+    if (status === 'PENDIENTE') {
+      setClase('bg-yellow-500');
+    } else if (status === 'PAGADO') {
+      setClase('bg-green-500');
+    } else {
+      setClase('bg-blue-800');
     }
   };
   return (
     <>
-      <h2 className="text-gray-800 font-bold mt-10">Estado Pedido:</h2>
-
       <select
-        className="mt-2 appearance-none bg-blue-600 border border-blue-600 text-white p-2 text-center rounded leading-tight focus:outline-none focus:bg-blue-600 focus:border-blue-500 uppercase text-xs font-bold "
+        className={`${clase} mt-2 appearance-none border border-blue-600 text-black p-2 text-center rounded leading-tight focus:outline-none focus:bg-blue-600 focus:border-blue-500 uppercase text-xs font-bold mx-auto`}
         value={status}
         onChange={(e) => cambiarEstadoPedido(e.target.value)}
       >

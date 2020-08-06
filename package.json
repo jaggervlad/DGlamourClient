@@ -8,10 +8,11 @@
     "analyze": "cross-env ANALYZE=true yarn build"
   },
   "dependencies": {
-    "@apollo/client": "3.0.0-rc.9",
+    "@apollo/client": "^3.1.2",
     "@apollo/react-ssr": "4.0.0",
     "@hookform/error-message": "0.0.3",
     "@next/bundle-analyzer": "9.1.4",
+    "apollo-link-context": "^1.0.20",
     "cross-env": "6.0.3",
     "faker": "^4.1.0",
     "formik": "2.1.4",

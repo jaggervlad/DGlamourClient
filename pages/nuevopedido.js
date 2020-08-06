@@ -20,18 +20,6 @@ import {
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
-// function update(cache, { data: nuevoPedido }) {
-//   const { obtenerPedidos } = cache.readQuery({
-//     query: OBTENER_PEDIDOS_SINGLE,
-//   });
-
-//   cache.writeQuery({
-//     query: OBTENER_PEDIDOS_SINGLE,
-//     data: {
-//       obtenerPedidos: [...obtenerPedidos, nuevoPedido],
-//     },
-//   });
-// }
 export default function NuevoPedido() {
   const { register, errors, handleSubmit } = useForm();
   const router = useRouter();
@@ -39,7 +27,16 @@ export default function NuevoPedido() {
   const pedidoContext = useContext(PedidoContext);
   const { cliente, productos, total } = pedidoContext;
   const [nuevoPedido] = useMutation(NUEVO_PEDIDO, {
-    refetchQueries: [{ query: OBTENER_PEDIDOS }],
+    update(cache, { data: nuevoPedido }) {
+      const { obtenerPedidos } = cache.readQuery({ query: OBTENER_PEDIDOS });
+
+      cache.writeQuery({
+        query: OBTENER_PEDIDOS,
+        data: {
+          obtenerPedidos: [...obtenerPedidos, nuevoPedido],
+        },
+      });
+    },
   });
   const { id } = cliente;
   const pedido = productos.map(

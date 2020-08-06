@@ -35,7 +35,7 @@ const ClientsTable = () => {
     </table>
   );
 };
-export default function () {
+export default function Index() {
   return (
     <Layout>
       <Title title={`clientes`} />

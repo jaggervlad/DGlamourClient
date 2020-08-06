@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useQuery } from '@apollo/client';
 import Layaout from '../../component/customs/Layout';
 import { OBTENER_PEDIDO } from '../../graphql/pedidos';
 import { Ring } from 'react-awesome-spinners';
 import NotLogded from '../../component/customs/NotLogged';
+import { EliminarPedido } from '../../component/pedidos/EliminarPedido';
 
-export default function () {
+export default function VerPedido() {
   const router = useRouter();
   const { id } = router.query;
   const { loading, error, data } = useQuery(OBTENER_PEDIDO, {
@@ -31,7 +33,7 @@ export default function () {
   return (
     <Layaout>
       <div
-        className={`w-full border-pink-500 border-t-4 mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg`}
+        className={`w-full border-blue-800 border-t-4 mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg`}
       >
         <div>
           {nombre && (
@@ -153,8 +155,21 @@ export default function () {
               {vendedorNombre}
             </span>
           </h2>
+
+          <div className="flex flex-row mb-6">
+            <EliminarPedido id={id} />
+          </div>
         </div>
       </div>
+
+      <Link href="/pedidos">
+        <button
+          type="button"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded mx-auto my-2"
+        >
+          Pedidos
+        </button>
+      </Link>
     </Layaout>
   );
 }
