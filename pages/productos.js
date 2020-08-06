@@ -6,20 +6,21 @@ import { NewLink } from '../component/customs/NewLink';
 import { Title } from '../component/customs/Title';
 
 export default function Productos({ productosApi }) {
-  const { data, loading, error, startPolling, stopPolling } = useQuery(
-    OBTENER_PRODUCTOS
-  );
-  const productos = data?.obtenerProductos;
+  const { data, loading, error } = useQuery(OBTENER_PRODUCTOS);
+  let productos;
 
   if (loading || !data) return 'Cargando..';
   if (error) return `Error || ${error.message}`;
+  if (data && data.obtenerProductos) {
+    productos = data.obtenerProductos;
+  }
 
   return (
     <>
       <Layout>
         <Title title={`productos`} />
 
-        <NewLink model={`producto`} ruta={`nuevoproducto`} />
+        <NewLink model={`nuevo producto`} ruta={`nuevoproducto`} />
 
         <table className="table-auto shadow-md mt-10 w-full w-lg">
           <thead className="bg-gray-800">

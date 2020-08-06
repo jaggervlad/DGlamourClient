@@ -35,8 +35,8 @@ const Producto = ({ producto }) => {
     }).then(async (result) => {
       if (result.value) {
         try {
-          const { data } = eliminarProducto({ variables: { id } });
-          Swal.fire('Correct', data.eliminarProducto, 'success');
+          await eliminarProducto({ variables: { id } });
+          Swal.fire('Correct', 'Se elimino el producto', 'success');
         } catch (error) {
           const errorMessage = error.message.replace('Graphql error: ', '');
           Swal.fire('Error', errorMessage, 'error');

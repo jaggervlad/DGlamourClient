@@ -39,7 +39,7 @@ export default function Index() {
   return (
     <Layout>
       <Title title={`clientes`} />
-      <NewLink model={`clientes`} ruta={`nuevocliente`} />
+      <NewLink model={`nuevo cliente`} ruta={`nuevocliente`} />
 
       <div className="overflow-x-scroll">
         <ClientsTable />

@@ -1,17 +1,17 @@
 import Layout from '../component/customs/Layout';
-import { useFormik } from 'formik';
-import { initialValues, validationSchema } from '../schemas/productos';
+import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@apollo/client';
 import Swal from 'sweetalert2';
 import { useRouter } from 'next/router';
 import { NUEVO_PRODUCTO, OBTENER_PRODUCTOS } from '../graphql/productos';
 import { OBTENER_CATEGORIAS } from '../graphql/categorias';
 import { TitleNew } from '../component/customs/TitleNew';
+import { ErrorMessage } from '@hookform/error-message';
 
 export default function NuevoProducto() {
+  let categorias;
   const router = useRouter();
   const { data, loading, error } = useQuery(OBTENER_CATEGORIAS);
-  const categorias = data?.obtenerCategorias;
   const [nuevoProducto] = useMutation(NUEVO_PRODUCTO, {
     update(cache, { data: nuevoProducto }) {
       const { obtenerProductos } = cache.readQuery({
@@ -27,43 +27,44 @@ export default function NuevoProducto() {
     },
   });
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (values, helpers) => {
-      const {
+  const { errors, register, handleSubmit } = useForm();
+
+  const onSubmit = async (data, e) => {
+    const {
+      nombre,
+      existencia,
+      precio,
+      marca,
+      undMed,
+      presentacion,
+      categoria,
+    } = data;
+    try {
+      const input = {
         nombre,
-        existencia,
-        precio,
+        existencia: Number(existencia),
+        precio: +precio,
         marca,
         undMed,
         presentacion,
         categoria,
-      } = values;
-      try {
-        const input = {
-          nombre,
-          existencia,
-          precio,
-          marca,
-          undMed,
-          presentacion,
-          categoria,
-        };
-        await nuevoProducto({ variables: { input } });
+      };
+      await nuevoProducto({ variables: { input } });
 
-        Swal.fire('Creado', 'Se creó producto correctamente', 'success');
-        helpers.setSubmitting(false);
-        router.push('/productos');
-      } catch (error) {
-        const errorMessage = error.message.replace('Graphql error: ', '');
-        Swal.fire('Error', errorMessage, 'error');
-      }
-    },
-  });
+      e.target.reset();
+      router.push('/productos');
+      Swal.fire('Creado', 'Se creó producto correctamente', 'success');
+    } catch (error) {
+      const errorMessage = error.message.replace('Graphql error: ', '');
+      Swal.fire('Error', errorMessage, 'error');
+    }
+  };
 
   if (loading) return 'Cargando..';
   if (error) return `Error || ${error}`;
+  if (data && data.obtenerCategorias) {
+    categorias = data.obtenerCategorias;
+  }
 
   return (
     <Layout>
@@ -73,7 +74,7 @@ export default function NuevoProducto() {
         <div className="w-full max-w-lg">
           <form
             className="bg-white shadow-md px-8 pt-6 pb-8 mb-4 "
-            onSubmit={formik.handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
           >
             <div className="mb-4">
               <label
@@ -85,21 +86,12 @@ export default function NuevoProducto() {
 
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="nombre"
-                type="text"
+                name="nombre"
                 placeholder="Nombre Producto"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.nombre}
+                ref={register({ required: true })}
               />
             </div>
-
-            {formik.touched.nombre && formik.errors.nombre ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p className="font-bold">Error</p>
-                <p>{formik.errors.nombre}</p>
-              </div>
-            ) : null}
+            <ErrorMessage errors={errors} name="nombre" />
 
             <div className="mb-4">
               <label
@@ -111,21 +103,13 @@ export default function NuevoProducto() {
 
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="existencia"
+                name="existencia"
                 type="number"
                 placeholder="Cantidad Disponible"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.existencia}
+                ref={register({ required: true })}
               />
             </div>
-
-            {formik.touched.existencia && formik.errors.existencia ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p className="font-bold">Error</p>
-                <p>{formik.errors.existencia}</p>
-              </div>
-            ) : null}
+            <ErrorMessage errors={errors} name="existencia" />
 
             <div className="mb-4">
               <label
@@ -137,21 +121,12 @@ export default function NuevoProducto() {
 
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="precio"
-                type="number"
+                name="precio"
                 placeholder="Precio Producto"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.precio}
+                ref={register({ required: true })}
               />
             </div>
-
-            {formik.touched.precio && formik.errors.precio ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p className="font-bold">Error</p>
-                <p>{formik.errors.precio}</p>
-              </div>
-            ) : null}
+            <ErrorMessage errors={errors} name="precio" />
 
             <div className="mb-4">
               <label
@@ -163,21 +138,12 @@ export default function NuevoProducto() {
 
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="marca"
-                type="text"
+                name="marca"
                 placeholder="Marca"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.marca}
+                ref={register({ required: true })}
               />
             </div>
-
-            {formik.touched.marca && formik.errors.marca ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p className="font-bold">Error</p>
-                <p>{formik.errors.marca}</p>
-              </div>
-            ) : null}
+            <ErrorMessage errors={errors} name="marca" />
 
             <div className="mb-4">
               <label
@@ -189,21 +155,12 @@ export default function NuevoProducto() {
 
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="undMed"
-                type="text"
+                name="undMed"
                 placeholder="Unidad de Medida"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.undMed}
+                ref={register({ required: true })}
               />
             </div>
-
-            {formik.touched.undMed && formik.errors.undMed ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p className="font-bold">Error</p>
-                <p>{formik.errors.undMed}</p>
-              </div>
-            ) : null}
+            <ErrorMessage errors={errors} name="undMed" />
 
             <div className="mb-4">
               <label
@@ -215,21 +172,12 @@ export default function NuevoProducto() {
 
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="presentacion"
-                type="text"
+                name="presentacion"
                 placeholder="Presentacion"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.presentacion}
+                ref={register({ require: true })}
               />
             </div>
-
-            {formik.touched.presentacion && formik.errors.presentacion ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p className="font-bold">Error</p>
-                <p>{formik.errors.presentacion}</p>
-              </div>
-            ) : null}
+            <ErrorMessage errors={errors} name="presentacion" />
 
             <div className="mb-4">
               <label
@@ -242,10 +190,7 @@ export default function NuevoProducto() {
               <select
                 name="categoria"
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="categoria"
-                value={formik.values.categoria}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
+                ref={register({ required: true })}
               >
                 {categorias.map((categoria) => (
                   <option
@@ -256,15 +201,9 @@ export default function NuevoProducto() {
                 ))}
               </select>
             </div>
-
-            {formik.touched.categoria && formik.errors.categoria ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.categoria}</p>
-              </div>
-            ) : null}
+            <ErrorMessage errors={errors} name="categoria" />
 
             <input
-              disabled={formik.isSubmitting || !formik.dirty}
               type="submit"
               className="bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900"
               value="Agregar Nuevo Producto"

@@ -104,7 +104,7 @@ export default function NuevoPedido() {
             className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
             name="direccion"
             placeholder="Dirección de envio"
-            ref={register({ required: 'Este campo es obligatorio' })}
+            ref={register({ required: true })}
           />
 
           <ErrorMessage errors={errors} name="direccion" />

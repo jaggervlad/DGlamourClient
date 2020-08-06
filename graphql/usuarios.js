@@ -35,3 +35,14 @@ export const OBTENER_USUARIO = gql`
     }
   }
 `;
+
+export const OBTENER_USUARIOS = gql`
+  query obtenerUsuarios {
+    obtenerUsuarios {
+      id
+      nombre
+      username
+      rol
+    }
+  }
+`;
