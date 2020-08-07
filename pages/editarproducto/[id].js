@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { OBTENER_PRODUCTO } from '../../graphql/productos';
 import { useCategories } from '../../hooks/useCategories';
 import { TitleNew } from '../../component/customs/TitleNew';
-import { EditForm } from './EditForm';
+import { EditForm } from '../../component/productos/EditForm';
 import { Ring } from 'react-awesome-spinners';
 import NotLogded from '../../component/customs/NotLogged';
 

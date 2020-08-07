@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 import { OBTENER_PEDIDO } from '../../graphql/pedidos';
 import { Ring } from 'react-awesome-spinners';
 import NotLogded from '../../component/customs/NotLogged';
-import { EditForm } from './EditForm';
+import { EditForm } from '../../component/pedidos/EditForm';
 
 export default function EditarPedido() {
   let pedido;

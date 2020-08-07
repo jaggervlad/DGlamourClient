@@ -1,5 +1,5 @@
 import Layout from '../component/customs/Layout';
-import Producto from '../component/Producto';
+import Producto from '../component/productos/Producto';
 import { useQuery } from '@apollo/client';
 import { OBTENER_PRODUCTOS } from '../graphql/productos';
 import { NewLink } from '../component/customs/NewLink';

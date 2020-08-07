@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 import { useMutation } from '@apollo/client';
 import Link from 'next/link';
-import { ELIMINAR_PRODUCTO, OBTENER_PRODUCTOS } from '../graphql/productos';
+import { ELIMINAR_PRODUCTO, OBTENER_PRODUCTOS } from '../../graphql/productos';
 
 const Producto = ({ producto }) => {
   const { id, nombre, precio, existencia, categoria, marca } = producto;
