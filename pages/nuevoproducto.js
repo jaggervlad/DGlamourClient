@@ -7,6 +7,8 @@ import { NUEVO_PRODUCTO, OBTENER_PRODUCTOS } from '../graphql/productos';
 import { OBTENER_CATEGORIAS } from '../graphql/categorias';
 import { TitleNew } from '../component/customs/TitleNew';
 import { ErrorMessage } from '@hookform/error-message';
+import { Ring } from 'react-awesome-spinners';
+import NotLogded from '../component/customs/NotLogged';
 
 export default function NuevoProducto() {
   let categorias;
@@ -60,8 +62,8 @@ export default function NuevoProducto() {
     }
   };
 
-  if (loading) return 'Cargando..';
-  if (error) return `Error || ${error}`;
+  if (loading) return <Ring />;
+  if (error) return <NotLogded />;
   if (data && data.obtenerCategorias) {
     categorias = data.obtenerCategorias;
   }

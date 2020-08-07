@@ -31,6 +31,7 @@ export const ACTUALIZAR_CLIENTE = gql`
 export const OBTENER_CLIENTE = gql`
   query obtenerCliente($id: ID!) {
     obtenerCliente(id: $id) {
+      id
       cedula
       nombre
       mail

@@ -24,6 +24,35 @@ export const ELIMINAR_PEDIDO = gql`
   }
 `;
 
+export const PEDIDOS_PAGADOS = gql`
+  query pedidosPagados {
+    pedidosPagados {
+      id
+      cliente {
+        id
+        nombre
+      }
+      direccion
+      total
+      estado
+    }
+  }
+`;
+
+export const PEDIDOS_PENDIENTES = gql`
+  query pedidosPendientes {
+    pedidosPendientes {
+      id
+      cliente {
+        id
+        nombre
+      }
+      direccion
+      total
+      estado
+    }
+  }
+`;
 export const OBTENER_PEDIDOS = gql`
   query obtenerPedidos($offset: Int, $limit: Int) {
     obtenerPedidos(offset: $offset, limit: $limit) {

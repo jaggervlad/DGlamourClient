@@ -12,6 +12,8 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { MEJORES_CLIENTES } from '../graphql/records';
+import { Ring } from 'react-awesome-spinners';
+import NotLogded from '../component/customs/NotLogged';
 
 export default function RecordVendedores() {
   const { data, loading, error, startPolling, stopPolling } = useQuery(
@@ -27,8 +29,8 @@ export default function RecordVendedores() {
     };
   }, [startPolling, stopPolling]);
 
-  if (loading) return 'Cargando..';
-  if (error) return `Error || ${error.message}`;
+  if (loading) return <Ring />;
+  if (error) return <NotLogded />;
 
   mejoresClientes?.map((cliente, index) => {
     clienteGrafica[index] = {

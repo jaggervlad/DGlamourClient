@@ -1,21 +1,21 @@
 import React from 'react';
 import Layout from '../component/customs/Layout';
-import Pedido from '../component/pedidos/Pedido';
+import PedidoPendiente from '../component/pedidos/PedidoPendiente';
 import { useQuery } from '@apollo/client';
-import { OBTENER_PEDIDOS } from '../graphql/pedidos';
+import { PEDIDOS_PENDIENTES } from '../graphql/pedidos';
 import { NewLink } from '../component/customs/NewLink';
 import { Title } from '../component/customs/Title';
 import { Ring } from 'react-awesome-spinners';
 import NotLogded from '../component/customs/NotLogged';
 
 export default function Pedidos() {
-  let obtenerPedidos;
-  const { data, loading, error } = useQuery(OBTENER_PEDIDOS);
+  let pedidosPendientes;
+  const { data, loading, error } = useQuery(PEDIDOS_PENDIENTES);
 
   if (loading) return <Ring />;
   if (error) return <NotLogded />;
   if (data) {
-    obtenerPedidos = data?.obtenerPedidos;
+    pedidosPendientes = data?.pedidosPendientes;
   }
 
   const TablePedido = () => (
@@ -28,13 +28,12 @@ export default function Pedidos() {
           <th className="w-1/5 py-2">Total</th>
           <th className="w-1/5 py-2">Estado</th>
           <th className="w-1/8 py-2">Ver</th>
-          <th className="w-1/8 py-2">Editar</th>
         </tr>
       </thead>
 
       <tbody className="bg-white">
-        {obtenerPedidos.map((pedido) => (
-          <Pedido key={pedido.id} pedido={pedido} />
+        {pedidosPendientes.map((pedido) => (
+          <PedidoPendiente key={pedido.id} pedido={pedido} />
         ))}
       </tbody>
     </table>
@@ -42,13 +41,11 @@ export default function Pedidos() {
 
   return (
     <Layout>
-      <Title title={`pedidos`} />
+      <Title title={`pedidos pendientes`} />
 
-      <NewLink model={`nuevo `} ruta={`nuevopedido`} />
-      <NewLink model={`ver pagados`} ruta={`pedidospagados`} />
-      <NewLink model={`ver pendientes`} ruta={`pedidospendientes`} />
+      <NewLink model={`pedidos`} ruta={`pedidos`} />
 
-      {obtenerPedidos.length === 0 ? (
+      {pedidosPendientes.length === 0 ? (
         <p className="mt-5 text-center text-2xl">No hay pedidos aún</p>
       ) : (
         <TablePedido />

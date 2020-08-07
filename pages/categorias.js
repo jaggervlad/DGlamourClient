@@ -4,17 +4,19 @@ import Layout from '../component/customs/Layout';
 import Categoria from '../component/Categoria';
 import { NewLink } from '../component/customs/NewLink';
 import { Title } from '../component/customs/Title';
+import NotLogded from '../component/customs/NotLogged';
+import { Ring } from 'react-awesome-spinners';
 
 export default function Categorias() {
   const { data, loading, error } = useQuery(OBTENER_CATEGORIAS);
+  if (loading) return <Ring />;
+  if (error) return <NotLogded />;
   const categorias = data?.obtenerCategorias;
-  if (loading || !data) return 'Cargando..';
-  if (error) return `Error || ${error.message}`;
 
   return (
     <Layout>
       <Title title={`categorias`} />
-      <NewLink model={`categoria`} ruta={`nuevacategoria`} />
+      <NewLink model={`nueva`} ruta={`nuevacategoria`} />
 
       <table className="table-auto shadow-md mt-10 w-full w-lg">
         <thead className="bg-gray-800">

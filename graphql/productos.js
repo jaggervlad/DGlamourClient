@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 export const OBTENER_PRODUCTO = gql`
   query obtenerProducto($id: ID!) {
     obtenerProducto(id: $id) {
+      id
       nombre
       existencia
       precio
@@ -47,8 +48,14 @@ export const ACTUALIZAR_PRODUCTO = gql`
     actualizarProducto(id: $id, input: $input) {
       id
       nombre
-      precio
       existencia
+      precio
+      marca
+      undMed
+      presentacion
+      categoria {
+        nombre
+      }
     }
   }
 `;

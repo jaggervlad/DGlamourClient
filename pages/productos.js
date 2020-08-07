@@ -4,13 +4,15 @@ import { useQuery } from '@apollo/client';
 import { OBTENER_PRODUCTOS } from '../graphql/productos';
 import { NewLink } from '../component/customs/NewLink';
 import { Title } from '../component/customs/Title';
+import { Ring } from 'react-awesome-spinners';
+import NotLogded from '../component/customs/NotLogged';
 
 export default function Productos({ productosApi }) {
   const { data, loading, error } = useQuery(OBTENER_PRODUCTOS);
   let productos;
 
-  if (loading || !data) return 'Cargando..';
-  if (error) return `Error || ${error.message}`;
+  if (loading) return <Ring />;
+  if (error) return <NotLogded />;
   if (data && data.obtenerProductos) {
     productos = data.obtenerProductos;
   }
@@ -20,7 +22,7 @@ export default function Productos({ productosApi }) {
       <Layout>
         <Title title={`productos`} />
 
-        <NewLink model={`nuevo producto`} ruta={`nuevoproducto`} />
+        <NewLink model={`nuevo`} ruta={`nuevoproducto`} />
 
         <table className="table-auto shadow-md mt-10 w-full w-lg">
           <thead className="bg-gray-800">

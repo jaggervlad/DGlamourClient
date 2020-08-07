@@ -5,18 +5,18 @@ import { useQuery, gql } from '@apollo/client';
 import { NewLink } from '../component/customs/NewLink';
 import { Title } from '../component/customs/Title';
 import { OBTENER_USUARIOS } from '../graphql/usuarios';
+import { Ring } from 'react-awesome-spinners';
+import NotLogded from '../component/customs/NotLogged';
 
 export default function Pedidos() {
   let obtenerUsuarios;
   const { data, loading, error } = useQuery(OBTENER_USUARIOS);
 
-  if (loading) return 'Cargando...';
-  if (error) return `Error || ${error.message}`;
-  if (data) {
-    obtenerUsuarios = data?.obtenerUsuarios;
-  }
+  if (loading) return <Ring />;
+  if (error) return <NotLogded />;
 
-  console.log(obtenerUsuarios);
+  obtenerUsuarios = data?.obtenerUsuarios;
+
   const TablePedido = () => (
     <table className="table-auto shadow-md mt-10 w-full w-lg">
       <thead className="bg-gray-800">
@@ -41,7 +41,7 @@ export default function Pedidos() {
     <Layout>
       <Title title={`usuarios`} />
 
-      <NewLink model={`nuevo usuario`} ruta={`registro`} />
+      <NewLink model={`nuevo`} ruta={`registro`} />
 
       {obtenerUsuarios.length === 0 ? (
         <p className="mt-5 text-center text-2xl">No hay usuarios</p>

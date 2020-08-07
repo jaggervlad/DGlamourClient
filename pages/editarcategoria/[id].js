@@ -9,8 +9,10 @@ import {
   ACTUALIZAR_CATEGORIA,
 } from '../../graphql/categorias';
 import { TitleNew } from '../../component/customs/TitleNew';
+import { Ring } from 'react-awesome-spinners';
+import NotLogded from '../../component/customs/NotLogged';
 
-export default function NuevoProducto() {
+export default function EditarCategoria() {
   const router = useRouter();
   const id = router.query.id;
   const { data, loading, error } = useQuery(OBTENER_CATEGORIA, {
@@ -19,8 +21,8 @@ export default function NuevoProducto() {
   const obtenerCategoria = data?.obtenerCategoria;
   const [actualizarCategoria] = useMutation(ACTUALIZAR_CATEGORIA);
 
-  if (loading || !data) return 'Cargando...';
-  if (error) return `Error ${error.message}`;
+  if (loading) return <Ring />;
+  if (error) return <NotLogded />;
 
   return (
     <Layout>
@@ -77,12 +79,12 @@ export default function NuevoProducto() {
 
                   <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="nombre"
                     type="text"
+                    name="nombre"
+                    value={values.nombre}
                     placeholder="Nombre Producto"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.nombre}
                   />
                 </div>
 
@@ -94,7 +96,7 @@ export default function NuevoProducto() {
                 ) : null}
 
                 <input
-                  disabled={isSubmitting || !dirty}
+                  disabled={isSubmitting}
                   type="submit"
                   className="bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900"
                   value="enviar"

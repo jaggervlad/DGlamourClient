@@ -6,36 +6,21 @@ import Swal from 'sweetalert2';
 import { OBTENER_CLIENTE, ACTUALIZAR_CLIENTE } from '../../graphql/clientes';
 import { validationSchema } from '../../schemas/clientes';
 import { TitleNew } from '../../component/customs/TitleNew';
+import { Ring } from 'react-awesome-spinners';
+import NotLogded from '../../component/customs/NotLogged';
 
 export default function EditarCliente() {
+  let obtenerCliente;
   const router = useRouter();
   const id = router.query.id;
   const { data, loading, error } = useQuery(OBTENER_CLIENTE, {
     variables: { id },
   });
   const [actualizarCliente] = useMutation(ACTUALIZAR_CLIENTE);
-  const obtenerCliente = data?.obtenerCliente;
 
-  const actualizarInfoCliente = async (values, helpers) => {
-    const { cedula, nombre, direccion, ciudad, mail, telefono } = values;
-    const input = { cedula, nombre, direccion, ciudad, mail, telefono };
-    try {
-      await actualizarCliente({ variables: { id, input } });
-      Swal.fire(
-        'Actualizado',
-        'El cliente se actualizo correctamente',
-        'success'
-      );
-      helpers.setSubmitting(false);
-      router.push('/');
-    } catch (error) {
-      const errorMessage = error.message.replace('Graphql error: ', '');
-      Swal.fire('Error', errorMessage, 'error');
-    }
-  };
-
-  if (loading) return 'Cargando...';
-  if (error) return `Error || ${error.message}`;
+  if (loading) return <Ring />;
+  if (error) return <NotLogded />;
+  obtenerCliente = data?.obtenerCliente;
 
   return (
     <Layout>
@@ -47,8 +32,39 @@ export default function EditarCliente() {
             enableReinitialize
             initialValues={obtenerCliente}
             validationSchema={validationSchema}
-            onSubmit={(valores, helpers) => {
-              actualizarInfoCliente(valores, helpers);
+            onSubmit={async (values, helpers) => {
+              const {
+                cedula,
+                nombre,
+                direccion,
+                ciudad,
+                mail,
+                telefono,
+              } = values;
+              const input = {
+                cedula,
+                nombre,
+                direccion,
+                ciudad,
+                mail,
+                telefono,
+              };
+              try {
+                await actualizarCliente({ variables: { id, input } });
+                helpers.setSubmitting(false);
+                router.push('/');
+                Swal.fire(
+                  'Actualizado',
+                  'El cliente se actualizo correctamente',
+                  'success'
+                );
+              } catch (error) {
+                const errorMessage = error.message.replace(
+                  'Graphql error: ',
+                  ''
+                );
+                Swal.fire('Error', errorMessage, 'error');
+              }
             }}
           >
             {({
@@ -75,7 +91,7 @@ export default function EditarCliente() {
 
                     <input
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="nombre"
+                      name="nombre"
                       type="text"
                       placeholder="Nombre Cliente"
                       onChange={handleChange}
@@ -101,7 +117,7 @@ export default function EditarCliente() {
 
                     <input
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="cedula"
+                      name="cedula"
                       type="text"
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -126,7 +142,7 @@ export default function EditarCliente() {
 
                     <input
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="direccion"
+                      name="direccion"
                       type="text"
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -151,7 +167,7 @@ export default function EditarCliente() {
 
                     <input
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="mail"
+                      name="mail"
                       type="email"
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -176,7 +192,7 @@ export default function EditarCliente() {
 
                     <input
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="telefono"
+                      name="telefono"
                       type="number"
                       placeholder="Teléfono Cliente"
                       onChange={handleChange}
@@ -202,7 +218,7 @@ export default function EditarCliente() {
 
                     <input
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="ciudad"
+                      name="ciudad"
                       type="text"
                       onChange={handleChange}
                       onBlur={handleBlur}

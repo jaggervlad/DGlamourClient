@@ -1,10 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { ACTUALIZAR_PEDIDO } from '../../graphql/pedidos';
+import {
+  ACTUALIZAR_PEDIDO,
+  PEDIDOS_PAGADOS,
+  PEDIDOS_PENDIENTES,
+} from '../../graphql/pedidos';
+import { OBTENER_PRODUCTOS } from '../../graphql/productos';
 import Swal from 'sweetalert2';
 
 export function StatusChange({ status, setEstado, cliente, pedidoMap, id }) {
-  const [actualizarPedido] = useMutation(ACTUALIZAR_PEDIDO);
+  const [actualizarPedido] = useMutation(ACTUALIZAR_PEDIDO, {
+    refetchQueries: [
+      { query: OBTENER_PRODUCTOS },
+      { query: PEDIDOS_PAGADOS },
+      { query: PEDIDOS_PENDIENTES },
+    ],
+  });
   const [clase, setClase] = useState('');
 
   useEffect(() => {
