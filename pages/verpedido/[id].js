@@ -131,7 +131,9 @@ export default function VerPedido() {
         </div>
 
         <div>
-          <h2 className="text-gray-800 font-bold mt-2">Pedido No. {id}</h2>
+          <h2 className="text-gray-800 font-bold mt-2">
+            Pedido No. {id.slice(5, 10)}
+          </h2>
 
           {pedido.map((articulo) => (
             <div key={articulo.id} className="mt-4">
