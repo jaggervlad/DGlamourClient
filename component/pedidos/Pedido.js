@@ -16,12 +16,13 @@ export default function Pedido({ pedido }) {
     console.log('click');
     fetch(`http://localhost:4000/pedidos/htmlPdf/${id}`, {
       method: 'GET',
-      responseType: 'blob',
     })
       .then((res) => res.blob())
       .then((blob) => {
-        const urlFile = URL.createObjectURL(blob);
-        window.open(urlFile);
+        if (typeof window !== 'undefined') {
+          const urlFile = URL.createObjectURL(blob);
+          window.open(urlFile);
+        }
       })
       .catch((error) =>
         Swal.fire('Error!', 'No se ha podido crear el PDF', 'error')
