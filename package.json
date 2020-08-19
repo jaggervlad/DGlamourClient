@@ -25,6 +25,7 @@
     "react-dom": "16.8.0",
     "react-hook-form": "6.2.0",
     "react-select": "3.1.0",
+    "react-to-print": "^2.9.0",
     "recharts": "1.8.5",
     "styled-components": "^5.1.1",
     "sweetalert2": "9.15.2",

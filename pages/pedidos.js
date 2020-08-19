@@ -38,6 +38,7 @@ export default function Pedidos() {
           <th className="w-1/5 py-2">Estado</th>
           <th className="w-1/8 py-2">Ver</th>
           <th className="w-1/8 py-2">Editar</th>
+          <th className="w-1/8 py-2">Imprimir</th>
         </tr>
       </thead>
 
