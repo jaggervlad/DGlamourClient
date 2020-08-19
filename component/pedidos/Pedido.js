@@ -14,9 +14,12 @@ export default function Pedido({ pedido }) {
   const handleClick = (e) => {
     e.preventDefault();
     console.log('click');
-    fetch(`http://localhost:4000/pedidos/htmlPdf/${id}`, {
-      method: 'GET',
-    })
+    fetch(
+      `https://blooming-citadel-99802.herokuapp.com/pedidos/htmlPdf/${id}`,
+      {
+        method: 'GET',
+      }
+    )
       .then((res) => res.blob())
       .then((blob) => {
         if (typeof window !== 'undefined') {
