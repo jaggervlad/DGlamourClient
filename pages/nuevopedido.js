@@ -6,17 +6,14 @@ import Swal from 'sweetalert2';
 import AsignarCliente from '../component/pedidos/AsignarCliente';
 import AsignarProductos from '../component/pedidos/AsignarProductos';
 import ResumenPedido from '../component/pedidos/ResumenPedido';
+import AsignarCostEnv from '../component/pedidos/AsignarCostEnv';
 import Layout from '../component/customs/Layout';
 import Total from '../component/pedidos/Total';
 import { TitleNew } from '../component/customs/TitleNew';
 // Graphql
 import { useMutation } from '@apollo/client';
 import { useMessage } from '../hooks/useMessage';
-import {
-  NUEVO_PEDIDO,
-  OBTENER_PEDIDOS_SINGLE,
-  OBTENER_PEDIDOS,
-} from '../graphql/pedidos';
+import { NUEVO_PEDIDO, OBTENER_PEDIDOS } from '../graphql/pedidos';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
@@ -25,7 +22,7 @@ export default function NuevoPedido() {
   const router = useRouter();
   const [mensaje, guardarMensaje, mostrarMensaje] = useMessage();
   const pedidoContext = useContext(PedidoContext);
-  const { cliente, productos, total } = pedidoContext;
+  const { cliente, productos, total, costEnv } = pedidoContext;
   const [nuevoPedido] = useMutation(NUEVO_PEDIDO, {
     update(cache, { data: nuevoPedido }) {
       const { obtenerPedidos } = cache.readQuery({ query: OBTENER_PEDIDOS });
@@ -51,7 +48,6 @@ export default function NuevoPedido() {
       ...productos
     }) => productos
   );
-
   const validarPedido = () => {
     return !productos?.every((producto) => producto.cantidad > 0) ||
       total === 0 ||
@@ -68,6 +64,7 @@ export default function NuevoPedido() {
         cliente: id,
         total,
         direccion,
+        costEnv,
       };
       await nuevoPedido({ variables: { input } });
       e.target.reset();
@@ -92,6 +89,7 @@ export default function NuevoPedido() {
           <AsignarCliente />
           <AsignarProductos />
           <ResumenPedido />
+          <AsignarCostEnv />
           <Total />
 
           <label

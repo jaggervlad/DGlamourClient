@@ -7,6 +7,7 @@ const httpLink = createHttpLink({
   uri: 'https://blooming-citadel-99802.herokuapp.com/graphql',
   fetch,
   credentials: 'include',
+  connectToDevTools: true,
 });
 
 const authLink = setContext((_, { headers }) => {

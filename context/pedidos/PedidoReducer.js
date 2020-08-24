@@ -3,6 +3,7 @@ import {
   SELECCIONAR_PRODUCTO,
   CANTIDAD_PRODUCTOS,
   ACTUALIZAR_TOTAL,
+  COSTO_ENVIO,
 } from '../../types';
 
 export default function Reducer(state, action) {
@@ -11,6 +12,12 @@ export default function Reducer(state, action) {
       return {
         ...state,
         cliente: action.payload,
+      };
+
+    case COSTO_ENVIO:
+      return {
+        ...state,
+        costEnv: action.payload,
       };
 
     case SELECCIONAR_PRODUCTO:
@@ -34,7 +41,7 @@ export default function Reducer(state, action) {
         ...state,
         total: state.productos.reduce(
           (nuevoTotal, articulo) =>
-            (nuevoTotal += articulo.precio * articulo.cantidad),
+            (nuevoTotal += articulo.precio * articulo.cantidad + state.costEnv),
           0
         ),
       };

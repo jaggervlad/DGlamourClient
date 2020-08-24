@@ -31,14 +31,14 @@ export default function Pedidos() {
     <table className="table-auto shadow-md mt-10 w-full w-lg">
       <thead className="bg-gray-800">
         <tr className="text-white">
-          <th className="w-1/5 py-2">No Pedido</th>
-          <th className="w-1/5 py-2">Cliente</th>
-          <th className="w-1/5 py-2">Direccion</th>
-          <th className="w-1/5 py-2">Total</th>
-          <th className="w-1/5 py-2">Estado</th>
-          <th className="w-1/8 py-2">Ver</th>
-          <th className="w-1/8 py-2">Editar</th>
-          <th className="w-1/8 py-2">Imprimir</th>
+          <th className=" py-1">No Pedido</th>
+          <th className=" py-1">Cliente</th>
+          <th className=" py-1">Direccion</th>
+          <th className=" py-1">Total</th>
+          <th className=" py-1">Estado</th>
+          <th className=" py-1">Ver</th>
+          <th className=" py-1">Editar</th>
+          <th className=" py-1">Imprimir</th>
         </tr>
       </thead>
 

@@ -78,6 +78,7 @@ export const OBTENER_PEDIDOS = gql`
       direccion
       pago
       descripcion
+      costEnv
     }
 
     totalPedidos
@@ -109,6 +110,7 @@ export const OBTENER_PEDIDO = gql`
       direccion
       pago
       descripcion
+      costEnv
     }
   }
 `;

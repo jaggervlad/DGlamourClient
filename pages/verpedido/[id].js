@@ -26,6 +26,7 @@ export default function VerPedido() {
     pedido,
     total,
     vendedor,
+    costEnv,
   } = data.obtenerPedido;
   const { mail, nombre, telefono } = cliente;
   const { nombre: vendedorNombre } = vendedor;
@@ -145,6 +146,13 @@ export default function VerPedido() {
               </p>
             </div>
           ))}
+
+          {costEnv && (
+            <p className="text-gray-800 mt-3 font-bold ">
+              Costo de Envío
+              <span className="font-light"> $ {costEnv}</span>
+            </p>
+          )}
 
           <p className="text-gray-800 mt-3 font-bold ">
             Total a pagar:
