@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import withApollo from 'next-with-apollo';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'https://blooming-citadel-99802.herokuapp.com/graphql',
   fetch,
   credentials: 'include',
   connectToDevTools: true,
