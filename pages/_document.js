@@ -3,7 +3,7 @@ import Document, { Head, Main, NextScript } from 'next/document';
 export default class MyDocument extends Document {
   render() {
     return (
-      <html lang="en">
+      <html lang="es">
         <Head>
           <link
             href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
