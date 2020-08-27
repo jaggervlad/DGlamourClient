@@ -58,13 +58,13 @@ export default function NuevoPedido() {
 
   const onSubmit = async (data, e) => {
     try {
-      const { direccion } = data;
+      const { direccion, costEnv } = data;
       const input = {
         pedido,
         cliente: id,
         total,
         direccion,
-        costEnv,
+        costEnv: Number(costEnv),
       };
       await nuevoPedido({ variables: { input } });
       e.target.reset();
@@ -89,14 +89,24 @@ export default function NuevoPedido() {
           <AsignarCliente />
           <AsignarProductos />
           <ResumenPedido />
-          <AsignarCostEnv />
           <Total />
+
+          <label className="block mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold">
+            4.- Costo de Envio
+          </label>
+
+          <input
+            name="costEnv"
+            ref={register()}
+            placeholder="Costo Envio"
+            className="shadow apperance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:ml-4"
+          />
 
           <label
             className="block mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold mb-2"
             htmlFor="direccion"
           >
-            Direccion de Envio
+            5.- Direccion de Envio
           </label>
           <input
             className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"

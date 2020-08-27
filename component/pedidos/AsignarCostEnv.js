@@ -23,7 +23,6 @@ export default function AsignarCostEnv() {
       </p>
 
       <input
-        type="number"
         placeholder="Costo Envio"
         className="shadow apperance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:ml-4"
         onChange={(e) => setCosto(e.target.value)}

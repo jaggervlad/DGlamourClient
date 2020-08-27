@@ -4,7 +4,9 @@ import {
   CANTIDAD_PRODUCTOS,
   ACTUALIZAR_TOTAL,
   COSTO_ENVIO,
+  RESET,
 } from '../../types';
+import { initialState } from './PedidoState';
 
 export default function Reducer(state, action) {
   switch (action.type) {
@@ -12,12 +14,6 @@ export default function Reducer(state, action) {
       return {
         ...state,
         cliente: action.payload,
-      };
-
-    case COSTO_ENVIO:
-      return {
-        ...state,
-        costEnv: action.payload,
       };
 
     case SELECCIONAR_PRODUCTO:
@@ -41,9 +37,14 @@ export default function Reducer(state, action) {
         ...state,
         total: state.productos.reduce(
           (nuevoTotal, articulo) =>
-            (nuevoTotal += articulo.precio * articulo.cantidad + state.costEnv),
+            (nuevoTotal += articulo.precio * articulo.cantidad),
           0
         ),
+      };
+
+    case RESET:
+      return {
+        initialState,
       };
 
     default:

@@ -7,29 +7,21 @@ import {
   CANTIDAD_PRODUCTOS,
   SELECCIONAR_CLIENTE,
   SELECCIONAR_PRODUCTO,
-  COSTO_ENVIO,
+  RESET,
 } from '../../types';
-const PedidoState = ({ children }) => {
-  const initialState = {
-    cliente: {},
-    productos: [],
-    total: 0,
-    costEnv: 0,
-  };
 
+export const initialState = {
+  cliente: {},
+  productos: [],
+  total: 0,
+};
+const PedidoState = ({ children }) => {
   const [state, dispatch] = useReducer(PedidoReducer, initialState);
 
   const agregarCliente = (cliente) => {
     dispatch({
       type: SELECCIONAR_CLIENTE,
       payload: cliente,
-    });
-  };
-
-  const agregarCostEnv = (cant) => {
-    dispatch({
-      type: COSTO_ENVIO,
-      payload: cant,
     });
   };
 
@@ -65,6 +57,12 @@ const PedidoState = ({ children }) => {
     });
   };
 
+  const resetPedidoReducer = () => {
+    dispatch({
+      type: RESET,
+    });
+  };
+
   return (
     <PedidoContext.Provider
       value={{
@@ -73,10 +71,10 @@ const PedidoState = ({ children }) => {
         total: state.total,
         costEnv: state.costEnv,
         agregarCliente,
-        agregarCostEnv,
         agregarProducto,
         cantidadProductos,
         actualizarTotal,
+        reset: resetPedidoReducer,
       }}
     >
       {children}
