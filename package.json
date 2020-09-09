@@ -18,6 +18,7 @@
     "formik": "2.1.4",
     "graphql": "15.1.0",
     "next": "latest",
+    "next-images": "1.4.1",
     "next-with-apollo": "5.1.0",
     "node-fetch": "2.6.0",
     "react": "16.8.0",

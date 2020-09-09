@@ -13,7 +13,6 @@ export default function Pedido({ pedido }) {
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log('click');
     fetch(
       `https://blooming-citadel-99802.herokuapp.com/pedidos/htmlPdf/${id}`,
       {
@@ -37,7 +36,7 @@ export default function Pedido({ pedido }) {
       <td className="border px-4 py-2">{id.slice(5, 10)}</td>
       <td className="border px-4 py-2">{nombre}</td>
       <td className="border px-4 py-2">{direccion}</td>
-      <td className="border px-4 py-2">{total}</td>
+      <td className="border px-4 py-2">{total.toFixed(2)}</td>
       <td className="border px-4 py-2">
         <StatusChange
           id={id}
