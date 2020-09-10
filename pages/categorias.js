@@ -6,17 +6,40 @@ import { NewLink } from '../component/customs/NewLink';
 import { Title } from '../component/customs/Title';
 import NotLogded from '../component/customs/NotLogged';
 import { Ring } from 'react-awesome-spinners';
+import { useState, useEffect } from 'react';
 
 export default function Categorias() {
   const { data, loading, error } = useQuery(OBTENER_CATEGORIAS);
+  const [filterCategories, setFilterCategories] = useState([]);
+  const [search, setSearch] = useState('');
+  const categorias = data?.obtenerCategorias;
+
+  useEffect(() => {
+    if (categorias) {
+      setFilterCategories(
+        categorias.filter((categorie) =>
+          categorie.nombre.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    }
+  }, [search, categorias]);
+
   if (loading) return <Ring />;
   if (error) return <NotLogded />;
-  const categorias = data?.obtenerCategorias;
 
   return (
     <Layout>
       <Title title={`categorias`} />
-      <NewLink model={`nueva`} ruta={`nuevacategoria`} />
+      <div class="grid grid-cols-2 w-1/3">
+        <NewLink model={`nueva`} ruta={`nuevacategoria`} />
+
+        <input
+          className="appearance-none bg-transparent border-none w-full text-gray-700 font-bold mr-3 py-1 px-2 leading-tight focus:outline-none"
+          type="text"
+          placeholder="Buscar.."
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
       <div class="relative">
         <div class="h-screen overflow-y-scroll">
@@ -30,7 +53,7 @@ export default function Categorias() {
             </thead>
 
             <tbody className="bg-white">
-              {categorias.map((categoria) => (
+              {filterCategories.map((categoria) => (
                 <Categoria key={categoria.id} categoria={categoria} />
               ))}
             </tbody>

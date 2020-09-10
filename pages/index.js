@@ -6,44 +6,66 @@ import NotLogged from '../component/customs/NotLogged';
 import { Ring } from 'react-awesome-spinners';
 import { NewLink } from '../component/customs/NewLink';
 import { Title } from '../component/customs/Title';
+import { useState, useEffect } from 'react';
 
-const ClientsTable = () => {
+export default function Index() {
   const { data, loading, error } = useQuery(OBTENER_CLIENTES);
+  const [search, setSearch] = useState('');
+  const [filterClients, setFilterClients] = useState([]);
   const obtenerClientes = data?.obtenerClientes;
+
+  useEffect(() => {
+    if (obtenerClientes) {
+      setFilterClients(
+        obtenerClientes.filter((client) =>
+          client.nombre.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    }
+  }, [search, obtenerClientes]);
 
   if (loading) return <Ring />;
   if (error) return <NotLogged />;
 
-  return (
-    <div class="relative">
-      <div className="h-screen overflow-y-scroll">
-        <table className="table-auto shadow-md mt-10 w-full w-lg">
-          <thead className="bg-gray-800">
-            <tr className="text-white">
-              <th className="w-1/5 py-2">Nombre</th>
-              <th className="w-1/5 py-2">Cedula</th>
-              <th className="w-1/5 py-2">Telefono</th>
-              <th className="w-1/5 py-2">Email</th>
-              <th className="w-1/8 py-2">Eliminar</th>
-              <th className="w-1/8 py-2">Editar</th>
-            </tr>
-          </thead>
+  const ClientsTable = () => {
+    return (
+      <div class="relative">
+        <div className="h-screen overflow-y-scroll">
+          <table className="table-auto shadow-md mt-10 w-full w-lg">
+            <thead className="bg-gray-800">
+              <tr className="text-white">
+                <th className="w-1/5 py-2">Nombre</th>
+                <th className="w-1/5 py-2">Cedula</th>
+                <th className="w-1/5 py-2">Telefono</th>
+                <th className="w-1/5 py-2">Email</th>
+                <th className="w-1/8 py-2">Eliminar</th>
+                <th className="w-1/8 py-2">Editar</th>
+              </tr>
+            </thead>
 
-          <tbody className="bg-white">
-            {obtenerClientes.map((cliente) => (
-              <Cliente key={cliente.id} cliente={cliente} />
-            ))}
-          </tbody>
-        </table>
+            <tbody className="bg-white">
+              {filterClients.map((cliente) => (
+                <Cliente key={cliente.id} cliente={cliente} />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  );
-};
-export default function Index() {
+    );
+  };
   return (
     <Layout>
       <Title title={`clientes`} />
-      <NewLink model={`nuevo`} ruta={`nuevocliente`} />
+
+      <div className="grid grid-cols-2 gap-2 w-1/3">
+        <NewLink model={`nuevo`} ruta={`nuevocliente`} />
+        <input
+          className="appearance-none bg-transparent border-none w-full text-gray-700 font-bold mr-3 py-1 px-2 leading-tight focus:outline-none"
+          type="text"
+          placeholder="Buscar.."
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
       <div className="overflow-x-scroll">
         <ClientsTable />
