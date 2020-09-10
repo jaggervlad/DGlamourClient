@@ -15,24 +15,28 @@ const ClientsTable = () => {
   if (error) return <NotLogged />;
 
   return (
-    <table className="table-auto shadow-md mt-10 w-full w-lg">
-      <thead className="bg-gray-800">
-        <tr className="text-white">
-          <th className="w-1/5 py-2">Nombre</th>
-          <th className="w-1/5 py-2">Cedula</th>
-          <th className="w-1/5 py-2">Telefono</th>
-          <th className="w-1/5 py-2">Email</th>
-          <th className="w-1/8 py-2">Eliminar</th>
-          <th className="w-1/8 py-2">Editar</th>
-        </tr>
-      </thead>
+    <div class="relative">
+      <div className="h-screen overflow-y-scroll">
+        <table className="table-auto shadow-md mt-10 w-full w-lg">
+          <thead className="bg-gray-800">
+            <tr className="text-white">
+              <th className="w-1/5 py-2">Nombre</th>
+              <th className="w-1/5 py-2">Cedula</th>
+              <th className="w-1/5 py-2">Telefono</th>
+              <th className="w-1/5 py-2">Email</th>
+              <th className="w-1/8 py-2">Eliminar</th>
+              <th className="w-1/8 py-2">Editar</th>
+            </tr>
+          </thead>
 
-      <tbody className="bg-white">
-        {obtenerClientes.map((cliente) => (
-          <Cliente key={cliente.id} cliente={cliente} />
-        ))}
-      </tbody>
-    </table>
+          <tbody className="bg-white">
+            {obtenerClientes.map((cliente) => (
+              <Cliente key={cliente.id} cliente={cliente} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 export default function Index() {
