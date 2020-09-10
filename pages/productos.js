@@ -7,7 +7,7 @@ import { Title } from '../component/customs/Title';
 import { Ring } from 'react-awesome-spinners';
 import NotLogded from '../component/customs/NotLogged';
 
-export default function Productos({ productosApi }) {
+const TableProducts = () => {
   const { data, loading, error } = useQuery(OBTENER_PRODUCTOS);
   let productos;
 
@@ -18,12 +18,8 @@ export default function Productos({ productosApi }) {
   }
 
   return (
-    <>
-      <Layout>
-        <Title title={`productos`} />
-
-        <NewLink model={`nuevo`} ruta={`nuevoproducto`} />
-
+    <div class="relative">
+      <div className="h-screen overflow-y-scroll">
         <table className="table-auto shadow-md mt-10 w-full w-lg">
           <thead className="bg-gray-800">
             <tr className="text-white">
@@ -43,6 +39,18 @@ export default function Productos({ productosApi }) {
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
+  );
+};
+export default function Productos() {
+  return (
+    <>
+      <Layout>
+        <Title title={`productos`} />
+        <NewLink model={`nuevo`} ruta={`nuevoproducto`} />
+
+        <TableProducts />
       </Layout>
     </>
   );
