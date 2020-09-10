@@ -28,26 +28,30 @@ export default function Pedidos() {
   if (error) return <NotLogded />;
 
   const TablePedido = () => (
-    <table className="table-auto shadow-md mt-10 w-full w-lg">
-      <thead className="bg-gray-800">
-        <tr className="text-white">
-          <th className=" py-1">No Pedido</th>
-          <th className=" py-1">Cliente</th>
-          <th className=" py-1">Direccion</th>
-          <th className=" py-1">Total</th>
-          <th className=" py-1">Estado</th>
-          <th className=" py-1">Ver</th>
-          <th className=" py-1">Editar</th>
-          <th className=" py-1">Imprimir</th>
-        </tr>
-      </thead>
+    <div className="relative">
+      <div className="h-screen overflow-y-scroll">
+        <table className="table-auto shadow-md mt-10 w-full">
+          <thead className="bg-gray-800">
+            <tr className="text-white">
+              <th className=" py-1">No Pedido</th>
+              <th className=" py-1">Cliente</th>
+              <th className=" py-1">Direccion</th>
+              <th className=" py-1">Total</th>
+              <th className=" py-1">Estado</th>
+              <th className=" py-1">Ver</th>
+              <th className=" py-1">Editar</th>
+              <th className=" py-1">Imprimir</th>
+            </tr>
+          </thead>
 
-      <tbody className="bg-white">
-        {pedidosFiltrados.map((pedido) => (
-          <Pedido key={pedido.id} pedido={pedido} />
-        ))}
-      </tbody>
-    </table>
+          <tbody className="bg-white">
+            {pedidosFiltrados.map((pedido) => (
+              <Pedido key={pedido.id} pedido={pedido} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 
   return (
