@@ -1,40 +1,32 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
-import PedidoContext from '../context/pedidos/PedidoContex';
+import PedidoContext from '../../context/pedidos/PedidoContex';
 // Components
 import Swal from 'sweetalert2';
-import AsignarCliente from '../component/pedidos/AsignarCliente';
-import AsignarProductos from '../component/pedidos/AsignarProductos';
-import ResumenPedido from '../component/pedidos/ResumenPedido';
-import Layout from '../component/customs/Layout';
-import Total from '../component/pedidos/Total';
-import { TitleNew } from '../component/customs/TitleNew';
+import AsignarCliente from '../../component/pedidos/AsignarCliente';
+import AsignarProductos from '../../component/pedidos/AsignarProductos';
+import ResumenPedido from '../../component/pedidos/ResumenPedido';
+import Layout from '../../component/customs/Layout';
+import Total from '../../component/pedidos/Total';
+import { TitleNew } from '../../component/customs/TitleNew';
 // Graphql
-import { useMutation } from '@apollo/client';
-import { useMessage } from '../hooks/useMessage';
-import { NUEVO_PEDIDO, OBTENER_PEDIDOS } from '../graphql/pedidos';
+import { useMutation, useQuery } from '@apollo/client';
+import { ACTUALIZAR_PEDIDO, OBTENER_PEDIDO } from '../../graphql/pedidos';
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import NotLogded from '../../component/customs/NotLogged';
+import { Ring } from 'react-awesome-spinners';
 
 export default function NuevoPedido() {
   const { register, errors, handleSubmit } = useForm();
   const router = useRouter();
-  const [mensaje, guardarMensaje, mostrarMensaje] = useMessage();
+  const { pedId } = router.query;
   const pedidoContext = useContext(PedidoContext);
   const { cliente, productos, total } = pedidoContext;
-  const [nuevoPedido] = useMutation(NUEVO_PEDIDO, {
-    update(cache, { data: nuevoPedido }) {
-      const { obtenerPedidos } = cache.readQuery({ query: OBTENER_PEDIDOS });
-
-      cache.writeQuery({
-        query: OBTENER_PEDIDOS,
-        data: {
-          obtenerPedidos: [...obtenerPedidos, nuevoPedido],
-        },
-      });
-    },
+  const { data, error, loading } = useQuery(OBTENER_PEDIDO, {
+    variables: { id: pedId },
   });
-  const { id } = cliente;
+  const [actualizarPedido] = useMutation(ACTUALIZAR_PEDIDO);
   const pedido = productos.map(
     ({
       __typename,
@@ -60,32 +52,38 @@ export default function NuevoPedido() {
       const { direccion, costEnv } = data;
       const input = {
         pedido,
-        cliente: id,
         total,
         direccion,
         costEnv: Number(costEnv),
       };
-      await nuevoPedido({ variables: { input } });
+      await actualizarPedido({ variables: { id: pedId, input } });
       e.target.reset();
       router.push('/pedidos');
-      Swal.fire('Correcto', 'El pedido se registró correctamente', 'success');
+      Swal.fire('Correcto', 'El pedido se edito correctamente', 'success');
     } catch (error) {
-      guardarMensaje(error.message.replace('GraphQL error: ', ''));
-
-      setTimeout(() => {
-        guardarMensaje(null);
-      }, 3000);
+      const errorMessage = error.message.replace('Graphql error: ', '');
+      Swal.fire('Error', errorMessage, 'error');
     }
   };
+
+  if (error) return <NotLogded />;
+  if (loading) return <Ring />;
+  const { obtenerPedido } = data;
+
   return (
     <Layout>
-      <TitleNew title={`nuevo pedido`} />
-
-      {mensaje && mostrarMensaje()}
+      <TitleNew title={`editar pedido`} />
 
       <div className="flex justify-center mt-5">
         <form className="w-full max-w-lg" onSubmit={handleSubmit(onSubmit)}>
-          <AsignarCliente />
+          <label className="block mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold">
+            Cliente
+          </label>
+
+          <p className="capitalize text-2xl font-bold ">
+            {obtenerPedido.cliente.nombre}
+          </p>
+
           <AsignarProductos />
           <ResumenPedido />
           <Total />
@@ -95,6 +93,7 @@ export default function NuevoPedido() {
           </label>
 
           <input
+            defaultValue={obtenerPedido.costEnv}
             name="costEnv"
             ref={register()}
             placeholder="Costo Envio"
@@ -108,6 +107,7 @@ export default function NuevoPedido() {
             5.- Direccion de Envio
           </label>
           <input
+            defaultValue={obtenerPedido.direccion}
             className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
             name="direccion"
             placeholder="Dirección de envio"
@@ -120,7 +120,7 @@ export default function NuevoPedido() {
             type="submit"
             className={` bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900 ${validarPedido()} `}
           >
-            Registrar Pedido
+            Editar Pedido
           </button>
         </form>
       </div>

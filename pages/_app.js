@@ -3,6 +3,7 @@ import { ApolloProvider } from '@apollo/client';
 import PedidoState from '../context/pedidos/PedidoState';
 import { getAccessToken } from '../utils/accessToken';
 import withData from '../apollo';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class MyApp extends App {
   render() {

@@ -11,6 +11,15 @@ export default function AdminOpts() {
       <nav className="mt-5 list-none">
         <li
           className={
+            router.pathname === '/reportes' ? 'bg-blue-800 p-2' : 'p-2'
+          }
+        >
+          <Link href="/reportes">
+            <a className="text-white block">Reportes de Ventas</a>
+          </Link>
+        </li>
+        <li
+          className={
             router.pathname === '/usuarios' ? 'bg-blue-800 p-2' : 'p-2'
           }
         >
@@ -34,24 +43,6 @@ export default function AdminOpts() {
         >
           <Link href="/recordclientes">
             <a className="text-white block">Record por Clientes</a>
-          </Link>
-        </li>
-        <li
-          className={
-            router.pathname === '/mejoresclientes' ? 'bg-blue-800 p-2' : 'p-2'
-          }
-        >
-          <Link href="/mejoresclientes">
-            <a className="text-white block">Record por Categoria</a>
-          </Link>
-        </li>
-        <li
-          className={
-            router.pathname === '/mejoresclientes' ? 'bg-blue-800 p-2' : 'p-2'
-          }
-        >
-          <Link href="/mejoresclientes">
-            <a className="text-white block">Record por Productos</a>
           </Link>
         </li>
       </nav>
