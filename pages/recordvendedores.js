@@ -16,18 +16,10 @@ import { Ring } from 'react-awesome-spinners';
 import NotLogded from '../component/customs/NotLogged';
 
 export default function RecordVendedores() {
-  const { data, loading, error, startPolling, stopPolling } = useQuery(
-    MEJORES_VENDEDORES
-  );
+  const { data, loading, error } = useQuery(MEJORES_VENDEDORES);
 
   const mejoresVendedores = data?.mejoresVendedores;
   const vendedorGrafica = [];
-  useEffect(() => {
-    startPolling(1000);
-    return () => {
-      stopPolling();
-    };
-  }, [startPolling, stopPolling]);
 
   if (loading) return <Ring />;
   if (error) return <NotLogded />;
@@ -35,7 +27,7 @@ export default function RecordVendedores() {
   mejoresVendedores?.map((vendedor, index) => {
     vendedorGrafica[index] = {
       ...vendedor.vendedor[0],
-      total: vendedor.total,
+      total: vendedor.total.toFixed(2),
     };
   });
 
@@ -47,7 +39,7 @@ export default function RecordVendedores() {
         <BarChart
           className="mt-10"
           width={600}
-          height={500}
+          height={700}
           data={vendedorGrafica}
           margin={{
             top: 5,
