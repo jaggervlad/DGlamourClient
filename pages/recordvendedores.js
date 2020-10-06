@@ -35,11 +35,9 @@ export default function RecordVendedores() {
     <Layout>
       <h1 className="text-2xl text-gray-800 font-light">Mejores Vendedores</h1>
 
-      <ResponsiveContainer width={'99%'} height={550}>
+      <ResponsiveContainer width={'100%'} height={500}>
         <BarChart
           className="mt-10"
-          width={600}
-          height={700}
           data={vendedorGrafica}
           margin={{
             top: 5,

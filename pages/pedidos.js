@@ -6,7 +6,7 @@ import { OBTENER_PEDIDOS } from '../graphql/pedidos';
 import { NewLink } from '../component/customs/NewLink';
 import { Title } from '../component/customs/Title';
 import { Ring } from 'react-awesome-spinners';
-import NotLogded from '../component/customs/NotLogged';
+import NotLogged from '../component/customs/NotLogged';
 
 export default function Pedidos() {
   const [search, setSearch] = useState('');
@@ -25,7 +25,7 @@ export default function Pedidos() {
   }, [search, obtenerPedidos]);
 
   if (loading) return <Ring />;
-  if (error) return <NotLogded />;
+  if (error) return <NotLogged />;
 
   const TablePedido = () => (
     <div className="relative">
