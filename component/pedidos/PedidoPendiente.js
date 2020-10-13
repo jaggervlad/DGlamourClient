@@ -8,7 +8,7 @@ export default function PedidoPendiente({ pedido }) {
   const PedidoTable = () => (
     <tr className="text-center">
       <td className="border px-4 py-2">{id.slice(5, 10)}</td>
-      <td className="border px-4 py-2">{nombre}</td>
+      <td className="border w-1/4  px-4 py-2">{nombre}</td>
       <td className="border px-4 py-2">{direccion}</td>
       <td className="border px-4 py-2">{total}</td>
       <td className="border px-4 py-2">{estado}</td>

@@ -1,10 +1,11 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { concatPagination } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 import fetch from 'node-fetch';
 import withApollo from 'next-with-apollo';
 
 const httpLink = createHttpLink({
-  uri: 'https://blooming-citadel-99802.herokuapp.com/graphql',
+  uri: 'http://localhost:4000/graphql',
   fetch,
   credentials: 'include',
   connectToDevTools: true,
@@ -25,7 +26,16 @@ export function getStandAloneApollo(initialState = {}) {
   return new ApolloClient({
     connectToDevTools: true,
     link: authLink.concat(httpLink),
-    cache: new InMemoryCache().restore(initialState || {}),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            obtenerPedidos: concatPagination(),
+            pedidosPagados: concatPagination(),
+          },
+        },
+      },
+    }).restore(initialState || {}),
   });
 }
 

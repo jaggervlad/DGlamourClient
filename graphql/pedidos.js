@@ -39,9 +39,9 @@ export const PEDIDOS_PAGADOS = gql`
   }
 `;
 
-export const PEDIDOS_PENDIENTES = gql`
-  query pedidosPendientes {
-    pedidosPendientes {
+export const PEDIDOS_DESPACHADOS = gql`
+  query pedidosDespachados {
+    pedidosDespachados {
       id
       cliente {
         id

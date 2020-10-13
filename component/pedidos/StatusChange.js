@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import {
   ACTUALIZAR_PEDIDO,
   PEDIDOS_PAGADOS,
-  PEDIDOS_PENDIENTES,
+  PEDIDOS_DESPACHADOS,
 } from '../../graphql/pedidos';
 import { OBTENER_PRODUCTOS } from '../../graphql/productos';
 import Swal from 'sweetalert2';
@@ -13,7 +13,7 @@ export function StatusChange({ status, setEstado, cliente, pedidoMap, id }) {
     refetchQueries: [
       { query: OBTENER_PRODUCTOS },
       { query: PEDIDOS_PAGADOS },
-      { query: PEDIDOS_PENDIENTES },
+      { query: PEDIDOS_DESPACHADOS },
     ],
   });
   const [clase, setClase] = useState('');
