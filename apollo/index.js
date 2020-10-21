@@ -1,9 +1,4 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import {
-  concatPagination,
-  offsetLimitPagination,
-  relayStylePagination,
-} from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 import fetch from 'node-fetch';
 import withApollo from 'next-with-apollo';

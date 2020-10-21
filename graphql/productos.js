@@ -34,6 +34,22 @@ export const OBTENER_PRODUCTOS = gql`
     }
   }
 `;
+export const ALL_PRODUCTS = gql`
+  query allProducts {
+    allProducts {
+      id
+      nombre
+      existencia
+      precio
+      marca
+      undMed
+      presentacion
+      categoria {
+        nombre
+      }
+    }
+  }
+`;
 
 export const NUEVO_PRODUCTO = gql`
   mutation nuevoProducto($input: ProductoInput!) {

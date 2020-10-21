@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import Select from 'react-select';
 import { useQuery } from '@apollo/client';
 import PedidoContext from '../../context/pedidos/PedidoContex';
-import { OBTENER_PRODUCTOS } from '../../graphql/productos';
+import { ALL_PRODUCTS } from '../../graphql/productos';
 
 export default function AsignarProductos() {
   const [productos, setProductos] = useState([]);
   const { agregarProducto, actualizarTotal } = useContext(PedidoContext);
-  const { data, loading, error } = useQuery(OBTENER_PRODUCTOS);
+  const { data, loading, error } = useQuery(ALL_PRODUCTS);
 
   useEffect(() => {
     if (productos === null) {
@@ -25,7 +25,8 @@ export default function AsignarProductos() {
 
   if (loading) return 'Cargando...';
   if (error) return `Erro ${error.message}`;
-  const obtenerProductos = data?.obtenerProductos;
+  const obtenerProductos = data?.allProducts;
+
   return (
     <>
       <p className="mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold">
