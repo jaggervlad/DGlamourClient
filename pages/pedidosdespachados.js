@@ -12,10 +12,7 @@ export default function Pedidos() {
   const [filterOrders, setFilterOrders] = useState([]);
   const [search, setSearch] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const { data, loading, error, fetchMore } = useQuery(PEDIDOS_DESPACHADOS, {
-    variables: { offset: pageNumber },
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data, loading, error, fetchMore } = useQuery(PEDIDOS_DESPACHADOS);
   const pedidosDespachados = data?.pedidosDespachados;
 
   useEffect(() => {
@@ -73,27 +70,10 @@ export default function Pedidos() {
         />
       </div>
 
-      {filterOrders.length === 0 ? (
-        <p className="mt-5 text-center text-2xl">No hay pedidos aún</p>
+      {filterOrders.length === 0 || loading ? (
+        <p className="mt-5 text-center text-2xl">cCargando...</p>
       ) : (
-        <div>
-          <TablePedido />
-
-          <div className="flex justify-center m-3">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setPageNumber((prevPageNumber) => prevPageNumber + 1);
-                fetchMore({
-                  variables: { offset: pageNumber },
-                });
-              }}
-              className="bg-blue-800 hover:bg-gray-800 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-            >
-              Cargar más
-            </button>
-          </div>
-        </div>
+        <TablePedido />
       )}
     </Layout>
   );

@@ -25,8 +25,8 @@ export const ELIMINAR_PEDIDO = gql`
 `;
 
 export const PEDIDOS_PAGADOS = gql`
-  query pedidosPagados {
-    pedidosPagados {
+  query pedidosPagados($offset: Int) {
+    pedidosPagados(offset: $offset) {
       id
       cliente {
         id
@@ -40,8 +40,8 @@ export const PEDIDOS_PAGADOS = gql`
 `;
 
 export const PEDIDOS_DESPACHADOS = gql`
-  query pedidosDespachados {
-    pedidosDespachados {
+  query pedidosDespachados($offset: Int) {
+    pedidosDespachados(offset: $offset) {
       id
       cliente {
         id
@@ -54,8 +54,8 @@ export const PEDIDOS_DESPACHADOS = gql`
   }
 `;
 export const OBTENER_PEDIDOS = gql`
-  query obtenerPedidos($offset: Int, $limit: Int) {
-    obtenerPedidos(offset: $offset, limit: $limit) {
+  query obtenerPedidos($offset: Int) {
+    obtenerPedidos(offset: $offset) {
       id
       pedido {
         id
@@ -80,8 +80,6 @@ export const OBTENER_PEDIDOS = gql`
       descripcion
       costEnv
     }
-
-    totalPedidos
   }
 `;
 

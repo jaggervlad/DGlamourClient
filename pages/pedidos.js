@@ -77,7 +77,7 @@ export default function Pedidos() {
       </div>
 
       {pedidosFiltrados.length === 0 || loading ? (
-        <p className="mt-5 text-center text-2xl">No hay pedidos aún</p>
+        <p className="mt-5 text-center text-2xl">Cargando...</p>
       ) : (
         <div>
           <TablePedido />
@@ -93,7 +93,7 @@ export default function Pedidos() {
               }}
               className="bg-blue-800 hover:bg-gray-800 text-white font-bold py-2 px-4 border border-blue-700 rounded"
             >
-              Cargar más
+              Siguiente
             </button>
           </div>
         </div>

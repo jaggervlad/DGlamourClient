@@ -23,16 +23,15 @@ export default function NuevoPedido() {
   const pedidoContext = useContext(PedidoContext);
   const { cliente, productos, total } = pedidoContext;
   const [nuevoPedido] = useMutation(NUEVO_PEDIDO, {
-    update(cache, { data: nuevoPedido }) {
-      const { obtenerPedidos } = cache.readQuery({ query: OBTENER_PEDIDOS });
-
-      cache.writeQuery({
-        query: OBTENER_PEDIDOS,
-        data: {
-          obtenerPedidos: [...obtenerPedidos, nuevoPedido],
-        },
-      });
-    },
+    // update(cache, { data: nuevoPedido }) {
+    //   const { obtenerPedidos } = cache.readQuery({ query: OBTENER_PEDIDOS });
+    //   cache.writeQuery({
+    //     query: OBTENER_PEDIDOS,
+    //     data: {
+    //       obtenerPedidos: [...obtenerPedidos, nuevoPedido],
+    //     },
+    //   });
+    // },
   });
   const { id } = cliente;
   const pedido = productos.map(
@@ -65,7 +64,10 @@ export default function NuevoPedido() {
         direccion,
         costEnv: Number(costEnv),
       };
-      await nuevoPedido({ variables: { input } });
+      await nuevoPedido({
+        variables: { input },
+        refetchQueries: [{ query: OBTENER_PEDIDOS }],
+      });
       e.target.reset();
       router.push('/pedidos');
       Swal.fire('Correcto', 'El pedido se registró correctamente', 'success');

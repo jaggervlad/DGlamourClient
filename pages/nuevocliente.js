@@ -14,7 +14,6 @@ export default function NuevoCliente() {
       const { obtenerClientes } = cache.readQuery({
         query: OBTENER_CLIENTES,
       });
-
       cache.writeQuery({
         query: OBTENER_CLIENTES,
         data: {
@@ -31,7 +30,9 @@ export default function NuevoCliente() {
       const { cedula, nombre, mail, telefono, direccion, ciudad } = values;
       const input = { cedula, nombre, mail, telefono, direccion, ciudad };
       try {
-        await nuevoCliente({ variables: { input } });
+        await nuevoCliente({
+          variables: { input },
+        });
         Swal.fire('Creado', 'Cliente creado correctamente!', 'success');
         helpers.setSubmitting(false);
         router.push('/');

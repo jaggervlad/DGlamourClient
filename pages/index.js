@@ -9,7 +9,8 @@ import { Title } from '../component/customs/Title';
 import { useState, useEffect } from 'react';
 
 export default function Index() {
-  const { data, loading, error } = useQuery(OBTENER_CLIENTES);
+  const [pageNumber, setPageNumber] = useState(1);
+  const { data, loading, error, fetchMore } = useQuery(OBTENER_CLIENTES);
   const [search, setSearch] = useState('');
   const [filterClients, setFilterClients] = useState([]);
   const obtenerClientes = data?.obtenerClientes;
@@ -34,12 +35,12 @@ export default function Index() {
           <table className="table-auto shadow-md mt-10 w-full w-lg">
             <thead className="bg-gray-800">
               <tr className="text-white">
-                <th className="w-1/5 py-2">Nombre</th>
-                <th className="w-1/5 py-2">Cedula</th>
-                <th className="w-1/5 py-2">Telefono</th>
-                <th className="w-1/5 py-2">Email</th>
-                <th className="w-1/8 py-2">Eliminar</th>
-                <th className="w-1/8 py-2">Editar</th>
+                <th className="py-2">Nombre</th>
+                <th className="py-2">Cedula</th>
+                <th className="py-2">Telefono</th>
+                <th className="py-2">Email</th>
+                <th className="py-2">Eliminar</th>
+                <th className="py-2">Editar</th>
               </tr>
             </thead>
 
@@ -67,9 +68,11 @@ export default function Index() {
         />
       </div>
 
-      <div className="overflow-x-scroll">
+      {filterClients.length === 0 || loading ? (
+        <p className="mt-5 text-center text-2xl">Cargando..</p>
+      ) : (
         <ClientsTable />
-      </div>
+      )}
     </Layout>
   );
 }

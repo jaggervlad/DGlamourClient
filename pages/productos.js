@@ -9,10 +9,14 @@ import { Ring } from 'react-awesome-spinners';
 import NotLogded from '../component/customs/NotLogged';
 
 export default function Productos() {
-  const { data, loading, error } = useQuery(OBTENER_PRODUCTOS);
-  const getProducts = data?.obtenerProductos;
   const [filterProducts, setFilterProducts] = useState([]);
   const [search, setSearch] = useState('');
+  const [pageNumber, setPageNumber] = useState(1);
+  const { data, loading, error, fetchMore } = useQuery(OBTENER_PRODUCTOS, {
+    variables: { offset: pageNumber },
+    fetchPolicy: 'cache-and-network',
+  });
+  const getProducts = data?.obtenerProductos;
 
   useEffect(() => {
     if (getProducts) {
@@ -23,23 +27,24 @@ export default function Productos() {
       );
     }
   }, [search, getProducts]);
+
   if (loading) return <Ring />;
   if (error) return <NotLogded />;
 
   const TableProducts = () => {
     return (
-      <div class="relative">
+      <div className="relative">
         <div className="h-screen overflow-y-scroll">
           <table className="table-auto shadow-md mt-10 w-full w-lg">
             <thead className="bg-gray-800">
               <tr className="text-white">
-                <th className="w-1/5 py-2">Nombre</th>
-                <th className="w-1/6 py-2">Existencia</th>
-                <th className="w-1/6 py-2">Precio</th>
-                <th className="w-1/5 py-2">Categoria</th>
-                <th className="w-1/5 py-2">Marca</th>
-                <th className="w-1/8 py-2">Eliminar</th>
-                <th className="w-1/8 py-2">Editar</th>
+                <th className="py-2">Nombre</th>
+                <th className="py-2">Existencia</th>
+                <th className="py-2">Precio</th>
+                <th className="py-2">Categoria</th>
+                <th className="py-2">Marca</th>
+                <th className="py-2">Eliminar</th>
+                <th className="py-2">Editar</th>
               </tr>
             </thead>
 
@@ -58,7 +63,7 @@ export default function Productos() {
       <Layout>
         <Title title={`productos`} />
 
-        <div class="grid grid-cols-2 w-1/3">
+        <div className="grid grid-cols-2 w-1/3">
           <NewLink model={`nuevo`} ruta={`nuevoproducto`} />
 
           <input
@@ -68,8 +73,28 @@ export default function Productos() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
+        {filterProducts.length === 0 || loading ? (
+          <p className="mt-5 text-center text-2xl">Cargando....</p>
+        ) : (
+          <div>
+            <TableProducts />
 
-        <TableProducts />
+            <div className="flex justify-center m-3">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageNumber((prevPageNumber) => prevPageNumber + 1);
+                  fetchMore({
+                    variables: { offset: pageNumber },
+                  });
+                }}
+                className="bg-blue-800 hover:bg-gray-800 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+              >
+                Siguiente
+              </button>
+            </div>
+          </div>
+        )}
       </Layout>
     </>
   );

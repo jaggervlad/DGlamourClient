@@ -43,8 +43,8 @@ export const OBTENER_CLIENTE = gql`
 `;
 
 export const OBTENER_CLIENTES = gql`
-  query obtenerClientes {
-    obtenerClientes {
+  query obtenerClientes($offset: Int) {
+    obtenerClientes(offset: $offset) {
       id
       cedula
       nombre

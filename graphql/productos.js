@@ -19,8 +19,8 @@ export const OBTENER_PRODUCTO = gql`
 `;
 
 export const OBTENER_PRODUCTOS = gql`
-  query obtenerProductos {
-    obtenerProductos {
+  query obtenerProductos($offset: Int) {
+    obtenerProductos(offset: $offset) {
       id
       nombre
       existencia

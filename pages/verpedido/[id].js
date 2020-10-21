@@ -54,7 +54,7 @@ export default function VerPedido() {
         className={`w-full border-blue-800 border-t-4 mt-4 bg-white rounded p-6 md:grid md:grid-cols-2 md:gap-4 shadow-lg`}
       >
         <div>
-          {nombre && (
+          {nombre ? (
             <p className="flex items-center my-2">
               <svg
                 fill="none"
@@ -69,6 +69,8 @@ export default function VerPedido() {
               </svg>
               {nombre}
             </p>
+          ) : (
+            ''
           )}
 
           {mail && (
@@ -178,9 +180,13 @@ export default function VerPedido() {
 
           <h2 className="text-gray-800 font-bold mt-10">
             Vendedor:
-            <span className="text-xl text-gray-600 capitalize mx-2">
-              {vendedorNombre}
-            </span>
+            {vendedorNombre ? (
+              <span className="text-xl text-gray-600 capitalize mx-2">
+                {vendedorNombre}
+              </span>
+            ) : (
+              ''
+            )}
           </h2>
 
           <div className="flex flex-row mb-6">
